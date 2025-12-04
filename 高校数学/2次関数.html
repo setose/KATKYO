@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2次関数の基礎</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@500&display=swap');
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .math-font {
+            font-family: 'Roboto Mono', monospace;
+            font-feature-settings: "cv01";
+        }
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        canvas {
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+        }
+        input[type=range] {
+            accent-color: #0f766e;
+        }
+        /* 入力欄 */
+        .calc-input {
+            border: 1px solid #94a3b8;
+            border-radius: 6px;
+            padding: 4px 8px;
+            width: 70px;
+            text-align: center;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .calc-input:focus {
+            border-color: #0f766e;
+            box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.1);
+        }
+        .correct {
+            border-color: #16a34a !important;
+            background-color: #f0fdf4 !important;
+            color: #15803d;
+        }
+        .wrong {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+        .section-header {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 1.5rem;
+            background-color: #f8fafc;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        .section-title {
+            font-weight: 700;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .step-number {
+            background-color: #0f766e;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+        }
+    </style>
+</head>
+<body class="pb-20 text-slate-700">
+
+    <!-- ヘッダー -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-20">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">数学I：2次関数</h1>
+                <p class="text-xs text-slate-500">基礎・グラフ・計算</p>
+            </div>
+            <div class="text-slate-400 text-sm font-medium">入門編</div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 space-y-6">
+
+        <!-- 1. 定義 -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">01</span>
+                    2次関数の定義
+                </h2>
+            </div>
+            <div class="p-6">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1 space-y-4">
+                        <p>
+                            1次関数（<span class="math-font text-sm bg-slate-100 px-1 rounded">y = ax + b</span>）が直線を表すのに対し、2次関数は曲線を表します。
+                            物を投げた時の軌道のようなこの曲線を<strong>放物線（ほうぶつせん）</strong>と呼びます。
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-lg">
+                            <p class="text-sm font-bold text-emerald-800 mb-2">基本形</p>
+                            <div class="text-center py-2">
+                                <span class="text-3xl font-bold math-font text-slate-800">y = ax²</span>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-2">
+                                右辺に <span class="math-font font-bold">x²</span>（xの2次式）が含まれるのが特徴です。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/3 flex flex-col gap-3 text-sm text-slate-600">
+                        <div class="bg-slate-50 p-3 rounded border border-slate-100 flex items-center gap-3">
+                            <span class="text-xl">⚾️</span>
+                            <span>ボールの軌道</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded border border-slate-100 flex items-center gap-3">
+                            <span class="text-xl">🌉</span>
+                            <span>吊り橋のケーブル</span>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded border border-slate-100 flex items-center gap-3">
+                            <span class="text-xl">📡</span>
+                            <span>パラボラアンテナ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. グラフの性質 -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">02</span>
+                    係数 a とグラフの形状
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-6 text-sm">
+                    <span class="math-font font-bold">y = ax²</span> における係数 <span class="math-font">a</span> の値によって、グラフの形状（開き方や向き）が変化します。
+                    下のスライダーを操作して確認してみましょう。
+                </p>
+                
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <!-- シミュレーター -->
+                    <div class="flex flex-col items-center space-y-4 bg-slate-50 p-4 rounded-lg border border-slate-200 mx-auto md:mx-0">
+                        <canvas id="graphCanvas" width="300" height="300" class="w-[280px] h-[280px] md:w-[300px] md:h-[300px]"></canvas>
+                        
+                        <div class="w-full max-w-[280px] space-y-2">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-bold text-slate-600">a の値</span>
+                                <span id="displayA" class="math-font text-lg font-bold text-teal-700">1.0</span>
+                            </div>
+                            <input type="range" id="aValue" min="-4" max="4" step="0.5" value="1" class="w-full h-1.5 bg-slate-300 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- 解説 -->
+                    <div class="flex-1 space-y-4 text-sm">
+                        <div class="border-l-4 border-emerald-500 pl-4 py-1">
+                            <h3 class="font-bold text-slate-800 mb-1">a > 0 のとき</h3>
+                            <p class="text-slate-600">グラフは<strong>下に凸（とつ）</strong>の形になります。（谷のような形状）</p>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-4 py-1">
+                            <h3 class="font-bold text-slate-800 mb-1">a < 0 のとき</h3>
+                            <p class="text-slate-600">グラフは<strong>上に凸（とつ）</strong>の形になります。（山のような形状）</p>
+                        </div>
+                        <div class="bg-slate-100 p-3 rounded text-slate-600 text-xs leading-relaxed">
+                            <span class="font-bold block mb-1">絶対値 |a| の意味</span>
+                            a の数字部分（絶対値）が大きいほど、グラフの開き具合は狭く（急に）なります。<br>
+                            逆に0に近いほど、開き具合は広く（緩やかに）なります。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 計算演習 -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">03</span>
+                    値の計算
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-4 text-sm">
+                    関数における計算の基本は「代入」です。<br>
+                    <span class="font-bold">「2乗してから係数 a をかける」</span>という順序に注意してください。
+                </p>
+
+                <!-- 例題 -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-slate-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">例題</span>
+                        <span class="text-sm font-bold text-slate-700"><span class="math-font">y = 2x²</span> における <span class="math-font">x = 3</span> の値</span>
+                    </div>
+                    <div class="pl-4 border-l-2 border-slate-300 space-y-1 text-sm math-font text-slate-600">
+                        <p>y = 2 × <span class="text-red-600 font-bold">3²</span></p>
+                        <p>y = 2 × <span class="text-red-600 font-bold">9</span> <span class="text-xs font-sans text-slate-400 ml-2">※ 累乗を優先</span></p>
+                        <p>y = <span class="text-slate-900 font-bold">18</span></p>
+                    </div>
+                </div>
+
+                <!-- 演習問題 -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">演習問題</h3>
+                    <div class="bg-white border border-slate-200 p-5 rounded-lg shadow-sm">
+                        <p class="mb-4 text-sm font-medium">
+                            関数 <span class="math-font text-lg text-teal-700">y = 3x²</span> について、次の値を求めなさい。
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex flex-wrap items-center gap-3 text-sm">
+                                <span class="w-6 font-bold text-slate-400">(1)</span>
+                                <span class="math-font">x = 2</span> のとき
+                                <span class="text-slate-300 mx-2">|</span>
+                                <span class="math-font text-slate-500">y = 3 × 2² =</span>
+                                <input type="number" id="q1" class="calc-input" placeholder="">
+                                <span id="res1" class="text-lg"></span>
+                            </div>
+                            
+                            <div class="flex flex-wrap items-center gap-3 text-sm">
+                                <span class="w-6 font-bold text-slate-400">(2)</span>
+                                <span class="math-font">x = -3</span> のとき
+                                <span class="text-slate-300 mx-2">|</span>
+                                <span class="math-font text-slate-500">y = 3 × (-3)² =</span>
+                                <input type="number" id="q2" class="calc-input" placeholder="">
+                                <span id="res2" class="text-lg"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex items-center justify-between">
+                            <span class="text-xs text-slate-500">※ 負の数の2乗は正の数になります。<br>(-3)² = (-3) × (-3) = 9</span>
+                            <button onclick="checkCalc()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded text-sm transition shadow-sm">
+                                答え合わせ
+                            </button>
+                        </div>
+                        <p id="calcFeedback" class="mt-3 text-sm font-bold text-right h-5"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. グラフの描画 -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">04</span>
+                    グラフの描画
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-4 text-sm">
+                    グラフを描く基本手順は、<strong>「変域内の点の座標を求め、それを滑らかな曲線で結ぶ」</strong>ことです。
+                    以下の表を埋めて、<span class="math-font">y = x²</span> のグラフを完成させてください。
+                </p>
+
+                <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 mb-4">
+                    <div class="flex flex-col lg:flex-row gap-8 items-center justify-center">
+                        <!-- テーブル -->
+                        <div class="overflow-x-auto w-full lg:w-auto">
+                            <table class="text-center text-sm border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+                                <thead class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                    <tr>
+                                        <th class="px-4 py-2 font-bold math-font border-r border-slate-200">x</th>
+                                        <th class="px-4 py-2 font-bold math-font">y = x²</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="plotTableBody">
+                                    <!-- JSで生成 -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 描画エリア: サイズを大きく -->
+                        <div class="flex flex-col items-center">
+                            <canvas id="plotCanvas" width="340" height="380" class="bg-white shadow-sm border border-slate-200"></canvas>
+                            <!-- グラフの下にメッセージを表示 -->
+                            <div id="completeMsg" class="mt-4 px-4 py-2 bg-teal-50 text-teal-700 font-bold text-sm rounded-full border border-teal-100 hidden animate-bounce">
+                                🎉 グラフ完成！素晴らしいです！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-xs text-slate-500 bg-white border border-slate-200 p-3 rounded">
+                    <strong>対称性（線対称）について</strong><br>
+                    <span class="math-font">y = ax²</span> のグラフは、y軸（<span class="math-font">x=0</span>の線）に対して左右対称になります。
+                    <span class="math-font">x = 2</span> のときと <span class="math-font">x = -2</span> のときで、yの値が等しくなることを確認しましょう。
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 式の決定 -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">05</span>
+                    2次関数の決定
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-4 text-sm">
+                    通る点の座標が分かっている場合、それを式に代入することで係数 <span class="math-font">a</span> を求めることができます。
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- 例題 -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="bg-slate-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">例題</span>
+                            <span class="text-sm font-bold text-slate-700">点 <span class="math-font">(2, 12)</span> を通る場合</span>
+                        </div>
+                        <div class="space-y-2 text-sm text-slate-600 leading-relaxed">
+                            <p>① <span class="math-font">y = ax²</span> に <span class="math-font">x=2, y=12</span> を代入</p>
+                            <p class="pl-4 math-font text-slate-800 font-medium">12 = a × 2²</p>
+                            <p>② 方程式を解く</p>
+                            <p class="pl-4 math-font">12 = 4a</p>
+                            <p class="pl-4 math-font">a = 3</p>
+                            <p>③ 答え</p>
+                            <p class="pl-4 math-font font-bold text-teal-700">y = 3x²</p>
+                        </div>
+                    </div>
+
+                    <!-- 練習 -->
+                    <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 mb-2">確認問題</h3>
+                            <p class="text-sm mb-4 text-slate-600">
+                                グラフが点 <span class="math-font text-slate-800 font-medium">(3, 18)</span> を通るとき、この2次関数の式を求めなさい。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <button onclick="toggleAnswer('ansFinal')" class="text-xs text-teal-600 hover:text-teal-800 font-bold underline transition">
+                                解答・解説を表示
+                            </button>
+
+                            <div id="ansFinal" class="hidden mt-3 pt-3 border-t border-slate-100 text-sm animate-fade-in">
+                                <p class="math-font text-base font-bold text-teal-700 mb-2">y = 2x²</p>
+                                <div class="text-xs text-slate-500 space-y-1">
+                                    <p>1. 代入：<span class="math-font">18 = a × 3²</span></p>
+                                    <p>2. 整理：<span class="math-font">18 = 9a</span></p>
+                                    <p>3. 解く：<span class="math-font">a = 2</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* --- 共通: グラフ描画クラス --- */
+        class GraphDrawer {
+            // originYRatio: キャンバス高さに対する原点のY位置（0.5=中心, >0.5=下寄り）
+            constructor(canvasId, scale = 20, originYRatio = 0.5) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.scale = scale;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height * originYRatio;
+                this.init();
+            }
+
+            init() {
+                this.clear();
+                this.drawGrid();
+                this.drawAxes();
+            }
+
+            clear() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+
+            drawGrid() {
+                this.ctx.strokeStyle = '#f1f5f9'; // slate-100
+                this.ctx.lineWidth = 1;
+                this.ctx.beginPath();
+                
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                
+                // グリッドを原点基準で描画
+                for(let x = this.cx; x < w; x += this.scale) { this.ctx.moveTo(x, 0); this.ctx.lineTo(x, h); }
+                for(let x = this.cx; x > 0; x -= this.scale) { this.ctx.moveTo(x, 0); this.ctx.lineTo(x, h); }
+                
+                for(let y = this.cy; y < h; y += this.scale) { this.ctx.moveTo(0, y); this.ctx.lineTo(w, y); }
+                for(let y = this.cy; y > 0; y -= this.scale) { this.ctx.moveTo(0, y); this.ctx.lineTo(w, y); }
+                
+                this.ctx.stroke();
+            }
+
+            drawAxes() {
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+
+                // 軸線
+                this.ctx.strokeStyle = '#94a3b8'; // slate-400
+                this.ctx.lineWidth = 1.5;
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, this.cy); this.ctx.lineTo(w, this.cy); // X軸
+                this.ctx.moveTo(this.cx, 0); this.ctx.lineTo(this.cx, h); // Y軸
+                this.ctx.stroke();
+
+                // 目盛りと数値
+                this.ctx.fillStyle = '#64748b';
+                this.ctx.font = '11px Roboto Mono';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'top';
+
+                // X軸
+                for (let i = 1; i * this.scale < w/2 + this.scale; i++) {
+                    // 正方向
+                    let px = this.cx + i * this.scale;
+                    if (px < w) {
+                        this.ctx.beginPath(); this.ctx.moveTo(px, this.cy - 3); this.ctx.lineTo(px, this.cy + 3); this.ctx.stroke();
+                        // 混雑回避のため一部間引くロジックを入れることも可能だが、今回はすべて表示
+                        if (i <= 5 || i % 2 === 0) { 
+                            this.ctx.fillText(i, px, this.cy + 6);
+                        }
+                    }
+                    // 負方向
+                    let nx = this.cx - i * this.scale;
+                    if (nx > 0) {
+                        this.ctx.beginPath(); this.ctx.moveTo(nx, this.cy - 3); this.ctx.lineTo(nx, this.cy + 3); this.ctx.stroke();
+                        if (i <= 5 || i % 2 === 0) {
+                            this.ctx.fillText(-i, nx, this.cy + 6);
+                        }
+                    }
+                }
+
+                // Y軸
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'middle';
+                
+                // 上方向（値はプラス）
+                for (let i = 1; i * this.scale < this.cy + this.scale; i++) {
+                    let py = this.cy - i * this.scale;
+                    if (py > 0) {
+                        this.ctx.beginPath(); this.ctx.moveTo(this.cx - 3, py); this.ctx.lineTo(this.cx + 3, py); this.ctx.stroke();
+                        this.ctx.fillText(i, this.cx - 6, py);
+                    }
+                }
+                // 下方向（値はマイナス）
+                for (let i = 1; i * this.scale < (h - this.cy) + this.scale; i++) {
+                    let ny = this.cy + i * this.scale;
+                    if (ny < h) {
+                        this.ctx.beginPath(); this.ctx.moveTo(this.cx - 3, ny); this.ctx.lineTo(this.cx + 3, ny); this.ctx.stroke();
+                        this.ctx.fillText(-i, this.cx - 6, ny);
+                    }
+                }
+                
+                // 原点O
+                this.ctx.fillText('O', this.cx - 6, this.cy + 6);
+                
+                // 軸ラベル
+                this.ctx.font = '12px Roboto Mono';
+                this.ctx.fillStyle = '#475569';
+                this.ctx.fillText('x', w - 10, this.cy - 12);
+                this.ctx.textAlign = 'left';
+                this.ctx.fillText('y', this.cx + 10, 15);
+            }
+
+            drawPoint(x, y, color = '#0f766e') {
+                const px = this.cx + x * this.scale;
+                const py = this.cy - y * this.scale;
+                
+                this.ctx.fillStyle = color;
+                this.ctx.beginPath();
+                this.ctx.arc(px, py, 5, 0, Math.PI * 2); // 半径を 3.5 -> 5 に拡大
+                this.ctx.fill();
+            }
+
+            drawQuadratic(a, color = '#0f766e') {
+                this.ctx.strokeStyle = color;
+                this.ctx.lineWidth = 2.5;
+                this.ctx.beginPath();
+                let started = false;
+                
+                const step = 0.2; // 滑らかさ
+                for (let px = 0; px <= this.canvas.width; px += step) {
+                    const x = (px - this.cx) / this.scale;
+                    const y = a * x * x;
+                    const py = this.cy - y * this.scale;
+
+                    if (py >= -100 && py <= this.canvas.height + 100) {
+                        if (!started) { this.ctx.moveTo(px, py); started = true; }
+                        else { this.ctx.lineTo(px, py); }
+                    }
+                }
+                this.ctx.stroke();
+            }
+        }
+
+        /* --- STEP 2: シミュレーター --- */
+        const simDrawer = new GraphDrawer('graphCanvas', 20, 0.5); // 原点は中心
+        const aInput = document.getElementById('aValue');
+        const displayA = document.getElementById('displayA');
+
+        function updateSim() {
+            const a = parseFloat(aInput.value);
+            displayA.textContent = a.toFixed(1);
+            simDrawer.init();
+            const color = a >= 0 ? '#ef4444' : '#3b82f6';
+            simDrawer.drawQuadratic(a, color);
+        }
+        aInput.addEventListener('input', updateSim);
+        updateSim();
+
+        /* --- STEP 3: 計算演習 --- */
+        function checkCalc() {
+            const q1 = parseInt(document.getElementById('q1').value);
+            const q2 = parseInt(document.getElementById('q2').value);
+            const res1 = document.getElementById('res1');
+            const res2 = document.getElementById('res2');
+            const feedback = document.getElementById('calcFeedback');
+            
+            let correctCount = 0;
+
+            if (q1 === 12) {
+                document.getElementById('q1').classList.add('correct');
+                document.getElementById('q1').classList.remove('wrong');
+                res1.innerHTML = '<span class="text-emerald-600">✓</span>';
+                correctCount++;
+            } else {
+                if(!isNaN(q1)) {
+                    document.getElementById('q1').classList.add('wrong');
+                    document.getElementById('q1').classList.remove('correct');
+                }
+                res1.innerHTML = '';
+            }
+
+            if (q2 === 27) {
+                document.getElementById('q2').classList.add('correct');
+                document.getElementById('q2').classList.remove('wrong');
+                res2.innerHTML = '<span class="text-emerald-600">✓</span>';
+                correctCount++;
+            } else {
+                if(!isNaN(q2)) {
+                    document.getElementById('q2').classList.add('wrong');
+                    document.getElementById('q2').classList.remove('correct');
+                }
+                res2.innerHTML = '';
+            }
+
+            if (correctCount === 2) {
+                feedback.textContent = "正解です。次のステップに進みましょう。";
+                feedback.className = "mt-3 text-sm font-bold text-right h-5 text-emerald-600";
+            } else {
+                feedback.textContent = "計算結果を再確認してください。";
+                feedback.className = "mt-3 text-sm font-bold text-right h-5 text-slate-500";
+            }
+        }
+
+        /* --- STEP 4: グラフ描画演習 --- */
+        // 原点をキャンバスの下の方(85%の位置)に配置して、正の値を広く表示
+        // スケールも32に拡大して見やすく
+        const plotDrawer = new GraphDrawer('plotCanvas', 32, 0.85);
+        plotDrawer.init();
+
+        const plotData = [
+            { x: -3, y: 9 },
+            { x: -2, y: 4 },
+            { x: -1, y: 1 },
+            { x: 0, y: 0, prefilled: true },
+            { x: 1, y: 1 },
+            { x: 2, y: 4 },
+            { x: 3, y: 9 }
+        ];
+
+        const tableBody = document.getElementById('plotTableBody');
+        let solvedCount = 0;
+
+        plotData.forEach((data, index) => {
+            const tr = document.createElement('tr');
+            tr.className = "border-b border-slate-100 hover:bg-slate-50";
+            
+            const tdX = document.createElement('td');
+            tdX.className = "p-2 font-medium math-font text-slate-600 border-r border-slate-100";
+            tdX.textContent = data.x;
+            
+            const tdY = document.createElement('td');
+            tdY.className = "p-2";
+            
+            if (data.prefilled) {
+                tdY.innerHTML = `<span class="font-bold math-font text-slate-400">${data.y}</span>`;
+                solvedCount++;
+                plotDrawer.drawPoint(data.x, data.y, '#94a3b8');
+            } else {
+                const input = document.createElement('input');
+                input.type = "number";
+                input.className = "calc-input w-12 text-sm";
+                input.dataset.index = index;
+                
+                input.addEventListener('input', (e) => {
+                    const val = parseInt(e.target.value);
+                    if (val === data.y) {
+                        if (!e.target.classList.contains('correct')) {
+                            e.target.classList.add('correct');
+                            e.target.disabled = true;
+                            plotDrawer.drawPoint(data.x, data.y);
+                            solvedCount++;
+                            checkAllSolved();
+                        }
+                    }
+                });
+                tdY.appendChild(input);
+            }
+
+            tr.appendChild(tdX);
+            tr.appendChild(tdY);
+            tableBody.appendChild(tr);
+        });
+
+        function checkAllSolved() {
+            if (solvedCount === plotData.length) {
+                setTimeout(() => {
+                    plotDrawer.drawQuadratic(1, '#0f766e');
+                    document.getElementById('completeMsg').classList.remove('hidden');
+                }, 500);
+            }
+        }
+
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
