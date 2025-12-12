@@ -89,7 +89,7 @@
         <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div>
                 <h1 class="text-lg font-bold text-slate-800">数学I：2次関数</h1>
-                <p class="text-xs text-slate-500">基礎・グラフ・計算</p>
+                <p class="text-xs text-slate-500">基礎・グラフ・計算・変域</p>
             </div>
             <div class="text-slate-400 text-sm font-medium">入門編</div>
         </div>
@@ -363,6 +363,88 @@
                 </div>
             </div>
         </section>
+        
+        <!-- 6. 定義域と値域（NEW） -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">06</span>
+                    定義域と値域
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-4 text-sm">
+                    グラフの範囲について考えます。<br>
+                    <strong>定義域（ていぎいき）</strong>は <span class="math-font">x</span> の範囲、<strong>値域（ちいき）</strong>はそれに対応する <span class="math-font">y</span> の範囲のことです。
+                </p>
+
+                <!-- 解説シミュレーター -->
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 mb-6">
+                    <h3 class="text-sm font-bold text-slate-700 mb-2 border-l-4 border-amber-400 pl-2">目で見て確認（グラフ: y = x²）</h3>
+                    <p class="text-xs text-slate-500 mb-4">
+                        スライダーでxの範囲（定義域）を変えてみよう。色のついた部分が対応するグラフです。
+                    </p>
+                    
+                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                        <canvas id="rangeCanvas" width="280" height="280" class="bg-white shadow-sm border border-slate-200"></canvas>
+                        
+                        <div class="flex-1 w-full space-y-6">
+                            <!-- スライダー -->
+                            <div class="space-y-4 bg-white p-4 rounded border border-slate-100">
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                        <span>最小 x: <span id="valMinX" class="text-blue-600">-1</span></span>
+                                    </div>
+                                    <input type="range" id="inputMinX" min="-3" max="0" step="1" value="-1" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                        <span>最大 x: <span id="valMaxX" class="text-blue-600">2</span></span>
+                                    </div>
+                                    <input type="range" id="inputMaxX" min="0" max="3" step="1" value="2" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                            </div>
+
+                            <!-- 値域の表示 -->
+                            <div class="bg-amber-50 border border-amber-100 p-3 rounded text-sm">
+                                <p class="font-bold text-slate-600 text-xs mb-1">現在の値域 (yの範囲)</p>
+                                <div class="flex items-center gap-2 justify-center font-bold math-font text-lg text-amber-700">
+                                    <span id="resRangeMin">0</span>
+                                    <span>≦ y ≦</span>
+                                    <span id="resRangeMax">4</span>
+                                </div>
+                                <p class="text-[10px] text-slate-500 mt-2 leading-snug">
+                                    ※ 注意：x=-1 と x=2 の端っこだけを比べると yは1と4ですが、<br>
+                                    <strong>途中にある「原点(y=0)」が一番小さい</strong>ことに注意しましょう！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 練習問題 -->
+                <div class="bg-white border border-slate-200 p-5 rounded-lg shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">演習問題</h3>
+                    <p class="mb-4 text-sm font-medium">
+                        関数 <span class="math-font text-lg text-teal-700">y = x²</span> について、<br>
+                        定義域が <span class="math-font font-bold">-2 ≦ x ≦ 1</span> のとき、値域を求めなさい。
+                    </p>
+
+                    <div class="flex items-center gap-2 justify-center bg-slate-50 p-4 rounded border border-slate-100 mb-4">
+                        <input type="number" id="ansRangeMin" class="calc-input w-16" placeholder="最小">
+                        <span class="math-font font-bold text-slate-600">≦ y ≦</span>
+                        <input type="number" id="ansRangeMax" class="calc-input w-16" placeholder="最大">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button onclick="checkRange()" class="ml-auto bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded text-sm transition shadow-sm">
+                            答え合わせ
+                        </button>
+                    </div>
+                    <p id="rangeFeedback" class="mt-3 text-sm font-bold text-right h-5"></p>
+                </div>
+            </div>
+        </section>
 
     </main>
 
@@ -484,13 +566,13 @@
                 
                 this.ctx.fillStyle = color;
                 this.ctx.beginPath();
-                this.ctx.arc(px, py, 5, 0, Math.PI * 2); // 半径を 3.5 -> 5 に拡大
+                this.ctx.arc(px, py, 5, 0, Math.PI * 2); 
                 this.ctx.fill();
             }
 
-            drawQuadratic(a, color = '#0f766e') {
+            drawQuadratic(a, color = '#0f766e', width = 2.5) {
                 this.ctx.strokeStyle = color;
-                this.ctx.lineWidth = 2.5;
+                this.ctx.lineWidth = width;
                 this.ctx.beginPath();
                 let started = false;
                 
@@ -506,6 +588,71 @@
                     }
                 }
                 this.ctx.stroke();
+            }
+
+            // 変域付きグラフ描画（NEW）
+            drawRangeHighlight(a, xMin, xMax) {
+                // 1. 全体の薄いグラフを描く
+                this.drawQuadratic(a, '#e2e8f0', 2);
+
+                // 2. 定義域の背景を塗る
+                const pxMin = this.cx + xMin * this.scale;
+                const pxMax = this.cx + xMax * this.scale;
+                
+                this.ctx.fillStyle = 'rgba(251, 191, 36, 0.1)'; // Amber-100, low opacity
+                this.ctx.fillRect(pxMin, 0, pxMax - pxMin, this.canvas.height);
+
+                // 3. 定義域の境界線（破線）
+                this.ctx.strokeStyle = '#d97706'; // Amber-600
+                this.ctx.setLineDash([4, 4]);
+                this.ctx.lineWidth = 1;
+                
+                // xMin line
+                this.ctx.beginPath();
+                this.ctx.moveTo(pxMin, 0); this.ctx.lineTo(pxMin, this.canvas.height);
+                this.ctx.stroke();
+                
+                // xMax line
+                this.ctx.beginPath();
+                this.ctx.moveTo(pxMax, 0); this.ctx.lineTo(pxMax, this.canvas.height);
+                this.ctx.stroke();
+                
+                this.ctx.setLineDash([]); // リセット
+
+                // 4. 定義域内のグラフを強調して描く
+                this.ctx.strokeStyle = '#d97706'; // Amber-600
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                let started = false;
+                
+                const startPx = Math.max(0, pxMin);
+                const endPx = Math.min(this.canvas.width, pxMax);
+
+                for (let px = startPx; px <= endPx; px += 0.5) {
+                    const x = (px - this.cx) / this.scale;
+                    const y = a * x * x;
+                    const py = this.cy - y * this.scale;
+
+                    if (py >= -100 && py <= this.canvas.height + 100) {
+                        if (!started) { this.ctx.moveTo(px, py); started = true; }
+                        else { this.ctx.lineTo(px, py); }
+                    }
+                }
+                this.ctx.stroke();
+
+                // 5. 端点と頂点（必要なら）を描画
+                // xMin
+                const yAtMin = a * xMin * xMin;
+                this.drawPoint(xMin, yAtMin, '#d97706');
+                
+                // xMax
+                const yAtMax = a * xMax * xMax;
+                this.drawPoint(xMax, yAtMax, '#d97706');
+
+                // Vertex if included
+                if (xMin <= 0 && xMax >= 0) {
+                    this.drawPoint(0, 0, '#d97706');
+                }
             }
         }
 
@@ -570,8 +717,6 @@
         }
 
         /* --- STEP 4: グラフ描画演習 --- */
-        // 原点をキャンバスの下の方(85%の位置)に配置して、正の値を広く表示
-        // スケールも32に拡大して見やすく
         const plotDrawer = new GraphDrawer('plotCanvas', 32, 0.85);
         plotDrawer.init();
 
@@ -635,6 +780,98 @@
                     plotDrawer.drawQuadratic(1, '#0f766e');
                     document.getElementById('completeMsg').classList.remove('hidden');
                 }, 500);
+            }
+        }
+
+        /* --- STEP 6: 変域シミュレーターと問題 --- */
+        const rangeDrawer = new GraphDrawer('rangeCanvas', 24, 0.85); // 下寄せ
+        const inputMinX = document.getElementById('inputMinX');
+        const inputMaxX = document.getElementById('inputMaxX');
+        const valMinX = document.getElementById('valMinX');
+        const valMaxX = document.getElementById('valMaxX');
+        const resRangeMin = document.getElementById('resRangeMin');
+        const resRangeMax = document.getElementById('resRangeMax');
+
+        function updateRangeSim() {
+            let minX = parseInt(inputMinX.value);
+            let maxX = parseInt(inputMaxX.value);
+
+            // 表示更新
+            valMinX.textContent = minX;
+            valMaxX.textContent = maxX;
+
+            // 計算: y = x^2
+            // 最小値: もし0を含めば0, 含めなければ両端の小さい方
+            // 最大値: 両端の大きい方 (絶対値が大きい方)
+            let minY, maxY;
+            
+            // 最大値の計算
+            maxY = Math.max(minX * minX, maxX * maxX);
+
+            // 最小値の計算
+            if (minX <= 0 && maxX >= 0) {
+                minY = 0; // 原点を含む
+            } else {
+                minY = Math.min(minX * minX, maxX * maxX);
+            }
+
+            resRangeMin.textContent = minY;
+            resRangeMax.textContent = maxY;
+
+            // 描画
+            rangeDrawer.init();
+            rangeDrawer.drawRangeHighlight(1, minX, maxX); // y=x^2
+        }
+
+        inputMinX.addEventListener('input', updateRangeSim);
+        inputMaxX.addEventListener('input', updateRangeSim);
+        // 初期実行
+        updateRangeSim();
+
+        // 練習問題のチェック
+        function checkRange() {
+            const ansMin = parseInt(document.getElementById('ansRangeMin').value);
+            const ansMax = parseInt(document.getElementById('ansRangeMax').value);
+            const feedback = document.getElementById('rangeFeedback');
+
+            // 問題: y=x^2, -2 <= x <= 1
+            // 端点: x=-2 -> y=4, x=1 -> y=1
+            // 原点(0,0)を通るか？ -> -2から1の間なので通る！
+            // よって 最小値0, 最大値4
+            const correctMin = 0;
+            const correctMax = 4;
+
+            let isCorrect = true;
+
+            if (ansMin === correctMin) {
+                document.getElementById('ansRangeMin').classList.add('correct');
+                document.getElementById('ansRangeMin').classList.remove('wrong');
+            } else {
+                document.getElementById('ansRangeMin').classList.add('wrong');
+                document.getElementById('ansRangeMin').classList.remove('correct');
+                isCorrect = false;
+            }
+
+            if (ansMax === correctMax) {
+                document.getElementById('ansRangeMax').classList.add('correct');
+                document.getElementById('ansRangeMax').classList.remove('wrong');
+            } else {
+                document.getElementById('ansRangeMax').classList.add('wrong');
+                document.getElementById('ansRangeMax').classList.remove('correct');
+                isCorrect = false;
+            }
+
+            if (isCorrect) {
+                feedback.textContent = "素晴らしい！正解です🎉";
+                feedback.className = "mt-3 text-sm font-bold text-right h-5 text-emerald-600";
+            } else {
+                // よくある間違いへのフィードバック
+                if (ansMin === 1 && ansMax === 4) {
+                    feedback.textContent = "惜しい！x=0（原点）を通ることを忘れていませんか？";
+                } else {
+                    feedback.textContent = "グラフの形をイメージしてみましょう。";
+                }
+                feedback.className = "mt-3 text-sm font-bold text-right h-5 text-red-500";
             }
         }
 
