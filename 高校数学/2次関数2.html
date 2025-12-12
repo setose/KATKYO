@@ -200,11 +200,59 @@
             </div>
         </section>
 
-        <!-- 2. グラフの平行移動（シミュレーター） -->
+        <!-- 2. 頂点について（NEW） -->
         <section class="card">
             <div class="section-header">
                 <h2 class="section-title">
                     <span class="step-number">02</span>
+                    頂点（ちょうてん）とは？
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-4 text-sm">
+                    グラフ全体を動かすとき、全部の点を見るのは大変です。<br>
+                    そこで、グラフの基準となる<strong>「頂点（ちょうてん）」</strong>に注目します。
+                </p>
+                <p class="mb-6 text-sm">
+                    頂点とは、放物線がＵターンする<strong>一番とがっている点（折り返し地点）</strong>のことです。
+                </p>
+
+                <div class="flex flex-col md:flex-row justify-center gap-8 bg-slate-50 p-6 rounded-lg border border-slate-200">
+                    <!-- 下に凸の例 -->
+                    <div class="text-center">
+                        <div class="relative bg-white rounded border border-slate-200 mb-2 mx-auto shadow-sm p-1">
+                            <canvas id="vertexDemoCanvas1" width="160" height="160"></canvas>
+                        </div>
+                        <p class="text-sm font-bold text-slate-700">一番底にある点</p>
+                    </div>
+                    
+                    <!-- 上に凸の例 -->
+                    <div class="text-center">
+                        <div class="relative bg-white rounded border border-slate-200 mb-2 mx-auto shadow-sm p-1">
+                            <canvas id="vertexDemoCanvas2" width="160" height="160"></canvas>
+                        </div>
+                        <p class="text-sm font-bold text-slate-700">一番てっぺんにある点</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-sm bg-yellow-50 p-4 rounded border border-yellow-100 text-slate-700">
+                    <h3 class="font-bold text-yellow-800 mb-2 flex items-center gap-2">
+                        <span>📌</span> なぜ頂点が大事なの？
+                    </h3>
+                    <p>
+                        グラフを平行移動させても、グラフの形（カーブ具合）は変わりません。<br>
+                        つまり、<strong>「頂点がどこに移動したか」さえ分かれば、グラフ全体の位置が決まる</strong>からです！<br>
+                        頂点は、グラフの「住所」のようなものだと考えてください。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. グラフの平行移動（シミュレーター） -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">03</span>
                     グラフの平行移動
                 </h2>
             </div>
@@ -256,11 +304,11 @@
             </div>
         </section>
 
-        <!-- 3. 例題解説 -->
+        <!-- 4. 例題解説 -->
         <section class="card">
             <div class="section-header">
                 <h2 class="section-title">
-                    <span class="step-number">03</span>
+                    <span class="step-number">04</span>
                     式と頂点の関係
                 </h2>
             </div>
@@ -306,11 +354,11 @@
             </div>
         </section>
 
-        <!-- 4. 練習問題 -->
+        <!-- 5. 練習問題 -->
         <section class="card">
             <div class="section-header">
                 <h2 class="section-title">
-                    <span class="step-number">04</span>
+                    <span class="step-number">05</span>
                     練習問題
                 </h2>
             </div>
@@ -374,6 +422,44 @@
                             答え合わせ
                         </button>
                         <p id="feedback" class="mt-3 text-sm font-bold h-5"></p>
+                    </div>
+                    
+                    <!-- グラフでの確認エリア (初期は非表示) -->
+                    <div id="practiceGraphArea" class="hidden mt-6 border-t border-slate-100 pt-6">
+                        <h3 class="text-sm font-bold text-slate-700 mb-4 text-center">📊 グラフで確認してみよう</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- 問1のグラフ -->
+                            <div class="flex flex-col items-center">
+                                <p class="text-xs font-bold text-slate-500 mb-2">問1のグラフ</p>
+                                <canvas id="practiceCanvas1" width="260" height="260" class="bg-slate-50 border border-slate-200"></canvas>
+                                <div class="text-xs mt-2 space-y-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="inline-block w-3 h-3 bg-emerald-600 rounded-full"></span>
+                                        <span class="text-emerald-700 font-bold math-font">y = x² + 5</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="inline-block w-3 h-3 bg-blue-600 rounded-full"></span>
+                                        <span class="text-blue-700 font-bold math-font">y = 3x² - 2</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 問2のグラフ -->
+                            <div class="flex flex-col items-center">
+                                <p class="text-xs font-bold text-slate-500 mb-2">問2のグラフ</p>
+                                <canvas id="practiceCanvas2" width="260" height="260" class="bg-slate-50 border border-slate-200"></canvas>
+                                <div class="text-xs mt-2 space-y-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="inline-block w-3 h-1 bg-slate-400 border-t border-b border-slate-400"></span>
+                                        <span class="text-slate-500 font-bold math-font">y = 2x²</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="inline-block w-3 h-3 bg-red-600 rounded-full"></span>
+                                        <span class="text-red-700 font-bold math-font">y = 2x² - 4</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -514,6 +600,28 @@
                 this.ctx.fill();
             }
 
+            // Canvas内に注釈を描画するメソッドを追加
+            drawVertexLabel(x, y, text, color = '#64748b', position = 'bottom') {
+                const px = this.cx + x * this.scale;
+                const py = this.cy - y * this.scale;
+
+                this.ctx.fillStyle = color;
+                this.ctx.font = 'bold 12px "Noto Sans JP", sans-serif';
+                this.ctx.textAlign = 'center';
+                
+                if (position === 'bottom') {
+                    // 点の下に文字
+                    this.ctx.textBaseline = 'top';
+                    this.ctx.fillText("↑", px, py + 8);
+                    this.ctx.fillText(text, px, py + 22);
+                } else {
+                    // 点の上に文字
+                    this.ctx.textBaseline = 'bottom';
+                    this.ctx.fillText("↓", px, py - 8);
+                    this.ctx.fillText(text, px, py - 22);
+                }
+            }
+
             // offsetQ: y軸方向への平行移動量
             drawQuadratic(a, offsetQ, color = '#0f766e', isDashed = false) {
                 this.ctx.strokeStyle = color;
@@ -555,22 +663,27 @@
         }
 
         /* --- 1. 点の移動グラフ描画 --- */
-        // 原点を下(0.8)にして、上のスペースを空ける (2, 7)を表示するため
         const pointDrawer = new GraphDrawer('pointMoveCanvas', 24, 0.85); 
         pointDrawer.init();
-        
-        // 元の点 A(2, 4)
         pointDrawer.drawPoint(2, 4, "A(2, 4)", "#64748b");
-        
-        // 移動後の点 A'(2, 7)
         pointDrawer.drawPoint(2, 7, "A'(2, 7)", "#059669");
-        
-        // 矢印
         pointDrawer.drawArrow(2, 4, 2, 7, "#059669");
 
+        /* --- 2. 頂点の説明用グラフ描画 --- */
+        const vertexDrawer1 = new GraphDrawer('vertexDemoCanvas1', 12, 0.7); 
+        vertexDrawer1.init();
+        vertexDrawer1.drawQuadratic(1, 0, '#059669'); 
+        // 頂点にラベルを描画 (下側)
+        vertexDrawer1.drawVertexLabel(0, 0, "ここが頂点", "#059669", 'bottom');
 
-        /* --- 2. シミュレーター --- */
-        // スケールを16に縮小、原点位置を0.7(下寄り)にして上部のスペースを確保
+        const vertexDrawer2 = new GraphDrawer('vertexDemoCanvas2', 12, 0.3); 
+        vertexDrawer2.init();
+        vertexDrawer2.drawQuadratic(-1, 0, '#2563eb'); 
+        // 頂点にラベルを描画 (上側)
+        vertexDrawer2.drawVertexLabel(0, 0, "ここが頂点", "#2563eb", 'top');
+
+
+        /* --- 3. シミュレーター --- */
         const simDrawer = new GraphDrawer('graphCanvas', 16, 0.7);
         const qInput = document.getElementById('qValue');
         const displayQ = document.getElementById('displayQ');
@@ -578,8 +691,6 @@
 
         function updateSim() {
             const q = parseInt(qInput.value);
-            
-            // 表示の更新
             displayQ.textContent = (q > 0 ? "+" + q : q);
             if (q === 0) {
                 equationPart.textContent = "";
@@ -591,12 +702,8 @@
             }
 
             simDrawer.init();
-            
-            // 基準線 (y=x^2)
-            simDrawer.drawQuadratic(1, 0, '#94a3b8', true); // グレー、点線
-            
-            // 移動後の線 (y=x^2+q)
-            simDrawer.drawQuadratic(1, q, '#059669', false); // エメラルド、実線
+            simDrawer.drawQuadratic(1, 0, '#94a3b8', true);
+            simDrawer.drawQuadratic(1, q, '#059669', false);
         }
         qInput.addEventListener('input', updateSim);
         updateSim();
@@ -605,16 +712,16 @@
         function checkAnswers() {
             const q1 = parseFloat(document.getElementById('q1').value);
             const q2 = parseFloat(document.getElementById('q2').value);
-            const q3Str = document.getElementById('q3').value.replace(/\s+/g, ''); // 空白除去
+            const q3Str = document.getElementById('q3').value.replace(/\s+/g, '');
             
             const res1 = document.getElementById('res1');
             const res2 = document.getElementById('res2');
             const res3 = document.getElementById('res3');
             const feedback = document.getElementById('feedback');
+            const graphArea = document.getElementById('practiceGraphArea');
 
             let correctCount = 0;
 
-            // 問1-1: y = x^2 + 5 -> 頂点(0, 5)
             if (q1 === 5) {
                 res1.innerHTML = '<span class="text-emerald-600">✓</span>';
                 document.getElementById('q1').classList.add('correct');
@@ -626,7 +733,6 @@
                 document.getElementById('q1').classList.remove('correct');
             }
 
-            // 問1-2: y = 3x^2 - 2 -> 頂点(0, -2)
             if (q2 === -2) {
                 res2.innerHTML = '<span class="text-emerald-600">✓</span>';
                 document.getElementById('q2').classList.add('correct');
@@ -638,7 +744,6 @@
                 document.getElementById('q2').classList.remove('correct');
             }
 
-            // 問2: -4
             if (q3Str === "-4") {
                 res3.innerHTML = '<span class="text-emerald-600">✓</span>';
                 document.getElementById('q3').classList.add('correct');
@@ -650,7 +755,6 @@
                 document.getElementById('q3').classList.remove('correct');
             }
 
-            // フィードバック
             if (correctCount === 3) {
                 feedback.textContent = "全問正解です！この調子でいきましょう🎉";
                 feedback.className = "mt-3 text-sm font-bold text-emerald-600 animate-bounce";
@@ -658,6 +762,26 @@
                 feedback.textContent = "惜しい！符号（プラス・マイナス）を確認してみよう。";
                 feedback.className = "mt-3 text-sm font-bold text-slate-500";
             }
+
+            // グラフ描画して表示
+            graphArea.classList.remove('hidden');
+            
+            // 問1用グラフ
+            const pDrawer1 = new GraphDrawer('practiceCanvas1', 18, 0.6); 
+            pDrawer1.init();
+            pDrawer1.drawQuadratic(1, 5, '#059669'); // emerald y=x^2+5
+            pDrawer1.drawVertexLabel(0, 5, "頂点(0,5)", '#059669', 'bottom');
+            
+            pDrawer1.drawQuadratic(3, -2, '#2563eb'); // blue y=3x^2-2
+            pDrawer1.drawVertexLabel(0, -2, "頂点(0,-2)", '#2563eb', 'top');
+
+            // 問2用グラフ
+            const pDrawer2 = new GraphDrawer('practiceCanvas2', 18, 0.3);
+            pDrawer2.init();
+            pDrawer2.drawQuadratic(2, 0, '#94a3b8', true); // dashed y=2x^2
+            pDrawer2.drawQuadratic(2, -4, '#dc2626'); // red y=2x^2-4
+            pDrawer2.drawVertexLabel(0, -4, "頂点(0,-4)", '#dc2626', 'top');
+            pDrawer2.drawArrow(0, 0, 0, -4, '#dc2626');
         }
     </script>
 </body>
