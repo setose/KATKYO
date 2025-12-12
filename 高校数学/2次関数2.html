@@ -97,6 +97,52 @@
 
     <main class="max-w-4xl mx-auto p-4 space-y-6">
 
+        <!-- 0. 導入比較 -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">Start</span>
+                    今回のテーマ
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-6 text-sm">
+                    今まで習った基本形と、今回新しく学ぶ式を比べてみましょう。<br>
+                    お尻に<strong>「数字（<span class="math-font">+q</span>）」</strong>がくっついているのが最大の違いです。
+                </p>
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <!-- 基本形 -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-center relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            これまでの復習
+                        </div>
+                        <p class="text-xs text-slate-500 mb-2 font-bold">基本形</p>
+                        <p class="math-font text-2xl font-bold text-slate-700 mb-3">y = ax²</p>
+                        <div class="text-xs text-slate-500 bg-white inline-block px-3 py-1 rounded border border-slate-100">
+                            頂点 <span class="math-font font-bold">(0, 0)</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 今回の形 -->
+                    <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-200 text-center relative shadow-sm">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                            NEW
+                        </div>
+                        <p class="text-xs text-emerald-600 mb-2 font-bold">今回の主役</p>
+                        <p class="math-font text-2xl font-bold text-emerald-800 mb-3">
+                            y = ax² <span class="bg-emerald-200 px-1 rounded ring-2 ring-emerald-100">+ q</span>
+                        </p>
+                        <div class="text-xs text-emerald-700 bg-white/80 inline-block px-3 py-1 rounded border border-emerald-100">
+                            頂点 <span class="math-font font-bold">(0, q)</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-6 text-sm text-center text-slate-600 bg-slate-50 p-2 rounded">
+                    この <span class="math-font font-bold text-emerald-600">+ q</span> が、グラフを上下に動かす鍵になります。
+                </p>
+            </div>
+        </section>
+
         <!-- 1. 点の移動 -->
         <section class="card">
             <div class="section-header">
@@ -112,34 +158,43 @@
                 </p>
 
                 <div class="flex flex-col md:flex-row gap-8 items-center justify-center bg-slate-50 p-6 rounded-lg border border-slate-200">
+                    <!-- 点移動のグラフ (NEW) -->
+                    <div class="flex flex-col items-center gap-2">
+                        <canvas id="pointMoveCanvas" width="280" height="280" class="shadow-sm bg-white"></canvas>
+                        <p class="text-xs text-slate-400">グラフ上の点の移動</p>
+                    </div>
+
                     <!-- 解説図 -->
-                    <div class="space-y-4">
+                    <div class="space-y-4 max-w-sm">
                         <div class="flex items-center gap-4 bg-white p-3 rounded shadow-sm border border-slate-100">
                             <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500">A</div>
                             <div class="text-sm">
                                 <span class="block text-xs text-slate-400">元の点</span>
-                                <span class="math-font font-bold">(2, 4)</span>
+                                <span class="math-font font-bold text-lg">(2, 4)</span>
                             </div>
                         </div>
                         
-                        <div class="flex justify-center text-2xl text-slate-400">↓ <span class="text-sm align-middle">+3 する</span></div>
+                        <div class="flex items-center gap-2 text-slate-500 font-bold pl-2">
+                            <span class="text-2xl">↓</span>
+                            <span class="text-sm bg-emerald-100 text-emerald-700 px-2 py-1 rounded">+3 平行移動</span>
+                        </div>
 
                         <div class="flex items-center gap-4 bg-white p-3 rounded shadow-sm border border-emerald-100 ring-2 ring-emerald-50">
                             <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-600">A'</div>
                             <div class="text-sm">
                                 <span class="block text-xs text-slate-400">移動後の点</span>
-                                <span class="math-font font-bold text-emerald-700">(2, 7)</span>
+                                <span class="math-font font-bold text-lg text-emerald-700">(2, 7)</span>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="text-sm bg-white p-4 rounded border border-slate-200">
-                        <h3 class="font-bold text-slate-700 mb-2">ポイント</h3>
-                        <ul class="list-disc pl-5 space-y-1 text-slate-600">
-                            <li>x座標（横の位置）は変わらない。</li>
-                            <li>y座標（高さ）だけが変わる。</li>
-                            <li>「<span class="font-bold text-emerald-600">y軸方向に +3 平行移動した</span>」と言います。</li>
-                        </ul>
+                        <div class="text-sm bg-white p-4 rounded border border-slate-200 mt-4">
+                            <h3 class="font-bold text-slate-700 mb-2">ポイント</h3>
+                            <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                                <li>x座標（横の位置）は変わらない。</li>
+                                <li>y座標（高さ）だけが変わる。</li>
+                                <li>「<span class="font-bold text-emerald-600">y軸方向に +3 平行移動した</span>」と言います。</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -330,12 +385,13 @@
     <script>
         /* --- 共通: グラフ描画クラス --- */
         class GraphDrawer {
-            constructor(canvasId, scale = 20) {
+            // originYRatio を追加して原点の高さを調整可能に
+            constructor(canvasId, scale = 20, originYRatio = 0.5) {
                 this.canvas = document.getElementById(canvasId);
                 this.ctx = this.canvas.getContext('2d');
                 this.scale = scale;
                 this.cx = this.canvas.width / 2;
-                this.cy = this.canvas.height / 2;
+                this.cy = this.canvas.height * originYRatio;
                 this.init();
             }
 
@@ -356,10 +412,13 @@
                 const w = this.canvas.width;
                 const h = this.canvas.height;
                 
+                // グリッドを原点基準で描画
                 for(let x = this.cx; x < w; x += this.scale) { this.ctx.moveTo(x, 0); this.ctx.lineTo(x, h); }
                 for(let x = this.cx; x > 0; x -= this.scale) { this.ctx.moveTo(x, 0); this.ctx.lineTo(x, h); }
+                
                 for(let y = this.cy; y < h; y += this.scale) { this.ctx.moveTo(0, y); this.ctx.lineTo(w, y); }
                 for(let y = this.cy; y > 0; y -= this.scale) { this.ctx.moveTo(0, y); this.ctx.lineTo(w, y); }
+                
                 this.ctx.stroke();
             }
 
@@ -378,28 +437,81 @@
                 this.ctx.textAlign = 'center';
                 this.ctx.textBaseline = 'top';
 
-                // X軸目盛り
-                for (let i = -5; i <= 5; i++) {
+                // X軸目盛り（動的計算）
+                const xSteps = Math.floor(w / 2 / this.scale);
+                for (let i = -xSteps; i <= xSteps; i++) {
                     if (i === 0) continue;
                     let px = this.cx + i * this.scale;
                     if (px > 0 && px < w) {
                         this.ctx.beginPath(); this.ctx.moveTo(px, this.cy - 3); this.ctx.lineTo(px, this.cy + 3); this.ctx.stroke();
-                        // this.ctx.fillText(i, px, this.cy + 6); // 数値は省略してスッキリさせる
+                        // 数値表示 (間引く)
+                        if (i % 2 === 0) this.ctx.fillText(i, px, this.cy + 6);
                     }
                 }
-                // Y軸目盛り
+
+                // Y軸目盛り（動的計算）
                 this.ctx.textAlign = 'right';
                 this.ctx.textBaseline = 'middle';
-                for (let i = -5; i <= 5; i++) {
+                const yStepsTop = Math.floor(this.cy / this.scale);
+                const yStepsBottom = Math.floor((h - this.cy) / this.scale);
+                
+                for (let i = -yStepsBottom; i <= yStepsTop; i++) {
                     if (i === 0) continue;
                     let py = this.cy - i * this.scale;
                     if (py > 0 && py < h) {
                         this.ctx.beginPath(); this.ctx.moveTo(this.cx - 3, py); this.ctx.lineTo(this.cx + 3, py); this.ctx.stroke();
-                        this.ctx.fillText(i, this.cx - 6, py);
+                        // 数値表示
+                         if (Math.abs(i) % 2 === 0) this.ctx.fillText(i, this.cx - 6, py);
                     }
                 }
                 
                 this.ctx.fillText('O', this.cx - 6, this.cy + 6);
+            }
+
+            drawPoint(x, y, label = "", color = '#64748b') {
+                const px = this.cx + x * this.scale;
+                const py = this.cy - y * this.scale;
+
+                this.ctx.fillStyle = color;
+                this.ctx.beginPath();
+                this.ctx.arc(px, py, 4, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                if (label) {
+                    this.ctx.fillStyle = color;
+                    this.ctx.font = 'bold 12px Roboto Mono';
+                    this.ctx.textAlign = 'left';
+                    this.ctx.fillText(label, px + 8, py);
+                }
+            }
+
+            drawArrow(x1, y1, x2, y2, color = '#059669') {
+                const px1 = this.cx + x1 * this.scale;
+                const py1 = this.cy - y1 * this.scale;
+                const px2 = this.cx + x2 * this.scale;
+                const py2 = this.cy - y2 * this.scale;
+
+                this.ctx.strokeStyle = color;
+                this.ctx.fillStyle = color;
+                this.ctx.lineWidth = 2;
+
+                // 点線を描く
+                this.ctx.beginPath();
+                this.ctx.setLineDash([4, 4]);
+                this.ctx.moveTo(px1, py1);
+                this.ctx.lineTo(px2, py2);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+
+                // 矢印の頭
+                const headLen = 8;
+                const angle = Math.atan2(py2 - py1, px2 - px1);
+                this.ctx.beginPath();
+                this.ctx.moveTo(px2, py2);
+                this.ctx.lineTo(px2 - headLen * Math.cos(angle - Math.PI / 6), py2 - headLen * Math.sin(angle - Math.PI / 6));
+                this.ctx.lineTo(px2 - headLen * Math.cos(angle + Math.PI / 6), py2 - headLen * Math.sin(angle + Math.PI / 6));
+                this.ctx.closePath();
+                this.ctx.fill();
             }
 
             // offsetQ: y軸方向への平行移動量
@@ -442,8 +554,24 @@
             }
         }
 
-        /* --- シミュレーター --- */
-        const simDrawer = new GraphDrawer('graphCanvas', 24); // scaleを少し大きく
+        /* --- 1. 点の移動グラフ描画 --- */
+        // 原点を下(0.8)にして、上のスペースを空ける (2, 7)を表示するため
+        const pointDrawer = new GraphDrawer('pointMoveCanvas', 24, 0.85); 
+        pointDrawer.init();
+        
+        // 元の点 A(2, 4)
+        pointDrawer.drawPoint(2, 4, "A(2, 4)", "#64748b");
+        
+        // 移動後の点 A'(2, 7)
+        pointDrawer.drawPoint(2, 7, "A'(2, 7)", "#059669");
+        
+        // 矢印
+        pointDrawer.drawArrow(2, 4, 2, 7, "#059669");
+
+
+        /* --- 2. シミュレーター --- */
+        // スケールを16に縮小、原点位置を0.7(下寄り)にして上部のスペースを確保
+        const simDrawer = new GraphDrawer('graphCanvas', 16, 0.7);
         const qInput = document.getElementById('qValue');
         const displayQ = document.getElementById('displayQ');
         const equationPart = document.getElementById('equationPart');
