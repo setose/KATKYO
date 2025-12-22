@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2次関数のグラフ（標準形）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@500&display=swap');
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc; /* Slate-50 */
+            color: #334155; /* Slate-700 */
+            line-height: 1.6;
+        }
+        .math-font {
+            font-family: 'Roboto Mono', monospace;
+            font-feature-settings: "cv01";
+        }
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px; /* 角丸を小さく */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        canvas {
+            background-color: #fff;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            touch-action: none;
+        }
+        input[type=range] {
+            accent-color: #2563eb; /* Blue-600 */
+        }
+        .section-header {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.75rem 1.25rem;
+            background-color: #f1f5f9; /* Slate-100 */
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+        .section-title {
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+        }
+        .step-number {
+            background-color: #475569; /* Slate-600 */
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+        }
+        /* ハイライト用（色味を落ち着かせる） */
+        .hl-x { color: #0369a1; font-weight: bold; } /* Sky-700 */
+        .hl-y { color: #15803d; font-weight: bold; } /* Green-700 */
+    </style>
+</head>
+<body class="pb-20">
+
+    <!-- ヘッダー -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div>
+                <h1 class="text-base font-bold text-slate-800">数学I：2次関数</h1>
+                <p class="text-xs text-slate-500">標準形・グラフの描画・頂点</p>
+            </div>
+            <div class="text-slate-500 text-xs font-medium border border-slate-300 px-2 py-1 rounded">応用編</div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 space-y-6">
+
+        <!-- 0. 導入 -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">Start</span>
+                    平行移動のまとめ（標準形）
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-6 text-sm">
+                    これまで学習した「x軸方向の平行移動」と「y軸方向の平行移動」を組み合わせます。<br>
+                    この形を2次関数の<strong>標準形</strong>と呼び、グラフを描く際の基本となります。
+                </p>
+                
+                <div class="bg-white p-6 rounded border border-slate-300 text-center max-w-lg mx-auto">
+                    <p class="text-xs text-slate-500 mb-2 font-bold bg-slate-100 inline-block px-2 py-1 rounded">基本式</p>
+                    
+                    <p class="math-font text-2xl font-bold text-slate-800 mb-4 mt-2">
+                        y = a(x <span class="text-sky-700">- p</span>)² <span class="text-green-700">+ q</span>
+                    </p>
+                    
+                    <div class="flex justify-center gap-6 text-sm border-t border-slate-100 pt-4">
+                        <div>
+                            <span class="text-xs text-slate-500 block">x軸方向</span>
+                            <span class="math-font hl-x">p</span> 移動
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 block">y軸方向</span>
+                            <span class="math-font hl-y">q</span> 移動
+                        </div>
+                    </div>
+
+                    <div class="mt-4 bg-slate-50 p-2 rounded border border-slate-200 inline-block w-full">
+                        <p class="text-sm">
+                            頂点 <span class="math-font font-bold text-lg">( <span class="hl-x">p</span> , <span class="hl-y">q</span> )</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-xs text-slate-600 bg-yellow-50 p-3 rounded border border-yellow-200">
+                    <strong>ポイント：</strong><br>
+                    カッコの中の符号は<strong>逆</strong>（<span class="math-font">-3</span> なら <span class="math-font">+3</span>）、外の符号は<strong>そのまま</strong>（<span class="math-font">+5</span> なら <span class="math-font">+5</span>）読み取ります。
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. シミュレーター -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">01</span>
+                    係数と頂点の移動
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-4 text-sm">
+                    スライダーを操作して、係数 <span class="math-font">p, q</span> の変化と頂点の移動の関係を確認しましょう。
+                </p>
+                
+                <div class="flex flex-col md:flex-row gap-8 items-start justify-center">
+                    <!-- グラフエリア -->
+                    <div class="flex flex-col items-center space-y-2 bg-slate-50 p-4 rounded border border-slate-200 mx-auto md:mx-0">
+                        <canvas id="simCanvas" width="300" height="300" class="w-[280px] h-[280px] md:w-[300px] md:h-[300px]"></canvas>
+                        <div class="text-center text-xs text-slate-500">
+                            現在の頂点： <span class="math-font font-bold text-slate-700" id="vertexCoord">(0, 0)</span>
+                        </div>
+                    </div>
+
+                    <!-- コントロール -->
+                    <div class="w-full max-w-[280px] space-y-6 pt-2">
+                        
+                        <!-- 横移動スライダー -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-bold text-sky-700">p (横移動)</span>
+                                <span id="valP" class="math-font font-bold text-slate-700 text-lg">0</span>
+                            </div>
+                            <input type="range" id="inputP" min="-4" max="4" step="1" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- 縦移動スライダー -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-bold text-green-700">q (縦移動)</span>
+                                <span id="valQ" class="math-font font-bold text-slate-700 text-lg">0</span>
+                            </div>
+                            <input type="range" id="inputQ" min="-4" max="4" step="1" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- 式の表示 -->
+                        <div class="bg-white p-3 rounded border border-slate-200 text-center">
+                            <p class="text-xs text-slate-400 mb-1">グラフの式</p>
+                            <p class="math-font text-base font-bold text-slate-800" id="equationDisplay">y = x²</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. グラフの描き方 -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">02</span>
+                    グラフ描画の手順
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-4 text-sm">
+                    正確なグラフを描くためには、頂点だけでなく、もう1点（通常はy切片）を通るように描きます。
+                </p>
+
+                <div class="space-y-3">
+                    <!-- Step 1 -->
+                    <div class="flex gap-3 items-start p-3 rounded bg-slate-50 border border-slate-100">
+                        <div class="bg-slate-600 text-white font-bold rounded w-6 h-6 flex items-center justify-center shrink-0 text-xs mt-0.5">1</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm mb-1">頂点をプロットする</h3>
+                            <p class="text-xs text-slate-600">
+                                式から頂点 <span class="math-font">(p, q)</span> を読み取り、座標平面上に点を打ちます。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex gap-3 items-start p-3 rounded bg-slate-50 border border-slate-100">
+                        <div class="bg-slate-600 text-white font-bold rounded w-6 h-6 flex items-center justify-center shrink-0 text-xs mt-0.5">2</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm mb-1">y軸との交点を求める</h3>
+                            <p class="text-xs text-slate-600 mb-2">
+                                式の <span class="math-font">x</span> に <span class="math-font">0</span> を代入して、y軸との交点（y切片）を計算し、点を打ちます。
+                            </p>
+                            <div class="bg-white p-2 rounded border border-slate-200 text-xs math-font text-slate-500">
+                                例: y = (x-2)² + 1 <br>
+                                x=0 を代入 → y = (-2)² + 1 = 5 → 点(0, 5)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex gap-3 items-start p-3 rounded bg-slate-50 border border-slate-100">
+                        <div class="bg-slate-600 text-white font-bold rounded w-6 h-6 flex items-center justify-center shrink-0 text-xs mt-0.5">3</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm mb-1">放物線を描く</h3>
+                            <p class="text-xs text-slate-600">
+                                頂点を通り、左右対称になるように滑らかな曲線を描きます。y軸との交点を通るように意識します。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 描画練習（インタラクティブ） -->
+        <section class="card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="step-number">03</span>
+                    【演習】グラフ作成
+                </h2>
+            </div>
+            <div class="p-6">
+                <p class="mb-4 text-sm">
+                    以下の式に対応するグラフを作成します。<br>
+                    画面をタップして<strong>「頂点」</strong>と<strong>「y軸との交点」</strong>の2点を指定してください。
+                </p>
+
+                <div class="bg-white border border-slate-200 rounded-lg p-4">
+                    <!-- 問題表示 -->
+                    <div class="flex flex-col items-center mb-4">
+                        <span class="text-xs font-bold text-white bg-slate-500 px-2 py-0.5 rounded mb-2">課題</span>
+                        <p class="math-font text-xl font-bold text-slate-800" id="targetEquation">y = (x - 2)² + 1</p>
+                        <p id="instruction" class="text-sm text-slate-600 mt-2 font-bold">
+                            1. 頂点をタップしてください
+                        </p>
+                    </div>
+
+                    <!-- 描画エリア -->
+                    <div class="flex justify-center relative">
+                        <canvas id="drawCanvas" width="320" height="320" class="cursor-crosshair bg-slate-50 border border-slate-200"></canvas>
+                        
+                        <!-- フィードバック表示エリア -->
+                        <div id="feedbackOverlay" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+                            <span class="text-2xl font-bold bg-white/90 px-4 py-2 rounded border border-slate-200 shadow-sm text-slate-700"></span>
+                        </div>
+                    </div>
+
+                    <!-- リセットボタン -->
+                    <div class="text-center mt-4">
+                        <button onclick="resetDrawing()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1 rounded border border-slate-300 transition">
+                            リセット
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 答え合わせ後の解説 -->
+                <div id="drawingExplanation" class="hidden mt-4 bg-slate-50 p-4 rounded border border-slate-200 text-sm">
+                    <p class="font-bold text-slate-800 mb-2">解説</p>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 text-xs">
+                        <li>頂点の座標：式より <span class="math-font font-bold">(2, 1)</span></li>
+                        <li>y軸との交点：<span class="math-font">x=0</span> を代入して <span class="math-font">y = (-2)² + 1 = 5</span>。つまり点 <span class="math-font">(0, 5)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* --- 共通: グラフ描画クラス --- */
+        class GraphDrawer {
+            constructor(canvasId, scale = 20) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.scale = scale;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height / 2;
+                this.init();
+            }
+
+            init() {
+                this.clear();
+                this.drawGrid();
+                this.drawAxes();
+            }
+
+            clear() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+
+            drawGrid() {
+                this.ctx.strokeStyle = '#f1f5f9';
+                this.ctx.lineWidth = 1;
+                this.ctx.beginPath();
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                
+                for(let x = this.cx; x < w; x += this.scale) { this.ctx.moveTo(x, 0); this.ctx.lineTo(x, h); }
+                for(let x = this.cx; x > 0; x -= this.scale) { this.ctx.moveTo(x, 0); this.ctx.lineTo(x, h); }
+                for(let y = this.cy; y < h; y += this.scale) { this.ctx.moveTo(0, y); this.ctx.lineTo(w, y); }
+                for(let y = this.cy; y > 0; y -= this.scale) { this.ctx.moveTo(0, y); this.ctx.lineTo(w, y); }
+                this.ctx.stroke();
+            }
+
+            drawAxes() {
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                this.ctx.strokeStyle = '#94a3b8'; // slate-400
+                this.ctx.lineWidth = 1;
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, this.cy); this.ctx.lineTo(w, this.cy);
+                this.ctx.moveTo(this.cx, 0); this.ctx.lineTo(this.cx, h);
+                this.ctx.stroke();
+
+                this.ctx.fillStyle = '#64748b'; // slate-500
+                this.ctx.font = '11px Roboto Mono';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'top';
+
+                // X軸目盛り
+                const xSteps = Math.floor(w / 2 / this.scale);
+                for (let i = -xSteps; i <= xSteps; i++) {
+                    if (i === 0) continue;
+                    let px = this.cx + i * this.scale;
+                    if (px > 0 && px < w) {
+                        this.ctx.beginPath(); this.ctx.moveTo(px, this.cy - 3); this.ctx.lineTo(px, this.cy + 3); this.ctx.stroke();
+                        if (Math.abs(i) % 2 === 0 || Math.abs(i) <= 5) this.ctx.fillText(i, px, this.cy + 6);
+                    }
+                }
+
+                // Y軸目盛り
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'middle';
+                const ySteps = Math.floor(h / 2 / this.scale);
+                for (let i = -ySteps; i <= ySteps; i++) {
+                    if (i === 0) continue;
+                    let py = this.cy - i * this.scale;
+                    if (py > 0 && py < h) {
+                        this.ctx.beginPath(); this.ctx.moveTo(this.cx - 3, py); this.ctx.lineTo(this.cx + 3, py); this.ctx.stroke();
+                        if (Math.abs(i) % 2 === 0 || Math.abs(i) <= 5) this.ctx.fillText(i, this.cx - 6, py);
+                    }
+                }
+                this.ctx.fillText('O', this.cx - 6, this.cy + 6);
+            }
+
+            // 点を描画 (座標系で指定)
+            drawPoint(x, y, color = '#2563eb', isHollow = false) {
+                const px = this.cx + x * this.scale;
+                const py = this.cy - y * this.scale;
+                
+                this.ctx.fillStyle = color;
+                this.ctx.strokeStyle = color;
+                this.ctx.beginPath();
+                this.ctx.arc(px, py, 4, 0, Math.PI * 2);
+                if (isHollow) {
+                    this.ctx.lineWidth = 2;
+                    this.ctx.stroke();
+                    this.ctx.fillStyle = 'white';
+                    this.ctx.fill();
+                } else {
+                    this.ctx.fill();
+                }
+            }
+
+            // y = a(x - p)^2 + q
+            drawQuadraticStandard(a, p, q, color = '#2563eb') {
+                this.ctx.strokeStyle = color;
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                let started = false;
+                
+                for (let px = 0; px <= this.canvas.width; px += 1) {
+                    const x = (px - this.cx) / this.scale;
+                    const y = a * (x - p) * (x - p) + q;
+                    const py = this.cy - y * this.scale;
+
+                    if (py >= -100 && py <= this.canvas.height + 100) {
+                        if (!started) { this.ctx.moveTo(px, py); started = true; }
+                        else { this.ctx.lineTo(px, py); }
+                    } else {
+                        started = false;
+                    }
+                }
+                this.ctx.stroke();
+
+                // 頂点
+                this.drawPoint(p, q, color);
+            }
+        }
+
+        /* --- 1. シミュレーター --- */
+        const simDrawer = new GraphDrawer('simCanvas', 24);
+        const inputP = document.getElementById('inputP');
+        const inputQ = document.getElementById('inputQ');
+        const valP = document.getElementById('valP');
+        const valQ = document.getElementById('valQ');
+        const eqDisplay = document.getElementById('equationDisplay');
+        const vertexCoord = document.getElementById('vertexCoord');
+
+        function updateSim() {
+            const p = parseInt(inputP.value);
+            const q = parseInt(inputQ.value);
+
+            // 値表示
+            valP.textContent = (p > 0 ? "+" + p : p);
+            valQ.textContent = (q > 0 ? "+" + q : q);
+            vertexCoord.textContent = `(${p}, ${q})`;
+
+            // 式表示の構築
+            let eq = "y = ";
+            if (p === 0) {
+                eq += "x²";
+            } else if (p > 0) {
+                eq += `(x - ${p})²`;
+            } else {
+                eq += `(x + ${Math.abs(p)})²`;
+            }
+            if (q > 0) {
+                eq += ` + ${q}`;
+            } else if (q < 0) {
+                eq += ` - ${Math.abs(q)}`;
+            }
+
+            eqDisplay.textContent = eq;
+
+            // 描画
+            simDrawer.init();
+            // 基準線 (薄いグレー、点線)
+            simDrawer.ctx.strokeStyle = '#cbd5e1';
+            simDrawer.ctx.lineWidth = 1;
+            simDrawer.ctx.setLineDash([4, 4]);
+            simDrawer.ctx.beginPath();
+            for(let px=0; px<=simDrawer.canvas.width; px+=2) {
+                const x = (px - simDrawer.cx)/simDrawer.scale;
+                const y = x*x;
+                const py = simDrawer.cy - y*simDrawer.scale;
+                if(px===0) simDrawer.ctx.moveTo(px, py); else simDrawer.ctx.lineTo(px, py);
+            }
+            simDrawer.ctx.stroke();
+            simDrawer.ctx.setLineDash([]);
+
+            // メイングラフ (青)
+            simDrawer.drawQuadraticStandard(1, p, q, '#2563eb');
+        }
+
+        inputP.addEventListener('input', updateSim);
+        inputQ.addEventListener('input', updateSim);
+        updateSim();
+
+
+        /* --- 3. 描画練習 --- */
+        const drawCanvas = document.getElementById('drawCanvas');
+        const drawDrawer = new GraphDrawer('drawCanvas', 24);
+        
+        const targetP = 2;
+        const targetQ = 1;
+        
+        let step = 0; // 0:頂点待ち, 1:もう一点待ち, 2:完了
+        let userPoints = [];
+
+        function getMousePos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = evt.clientX || (evt.touches && evt.touches[0].clientX);
+            const clientY = evt.clientY || (evt.touches && evt.touches[0].clientY);
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function toMathCoord(pixelPos) {
+            const x = Math.round((pixelPos.x - drawDrawer.cx) / drawDrawer.scale);
+            const y = Math.round((drawDrawer.cy - pixelPos.y) / drawDrawer.scale);
+            return { x, y };
+        }
+
+        drawCanvas.addEventListener('click', handleDrawInput);
+
+        function handleDrawInput(evt) {
+            if (step >= 2) return;
+
+            const pos = getMousePos(drawCanvas, evt);
+            const mathPos = toMathCoord(pos);
+            const instruction = document.getElementById('instruction');
+
+            if (step === 0) {
+                // 頂点の判定 (2, 1)
+                if (mathPos.x === targetP && mathPos.y === targetQ) {
+                    userPoints.push(mathPos);
+                    drawDrawer.drawPoint(mathPos.x, mathPos.y, '#16a34a'); // 緑
+                    showFeedback('正解！', 'text-green-600');
+                    step = 1;
+                    instruction.textContent = "2. y軸との交点（x=0 の点）をタップしてください";
+                } else {
+                    showFeedback('違います', 'text-red-600');
+                }
+            } else if (step === 1) {
+                // もう一点の判定
+                const expectedY = (mathPos.x - targetP)**2 + targetQ;
+                
+                if (mathPos.y === expectedY) {
+                    userPoints.push(mathPos);
+                    drawDrawer.drawPoint(mathPos.x, mathPos.y, '#16a34a');
+                    showFeedback('正解！', 'text-green-600');
+                    step = 2;
+                    finishDrawing();
+                } else {
+                    showFeedback('違います', 'text-red-600');
+                }
+            }
+        }
+
+        function showFeedback(text, colorClass) {
+            const el = document.getElementById('feedbackOverlay');
+            const span = el.querySelector('span');
+            span.textContent = text;
+            span.className = `text-lg font-bold bg-white/95 px-6 py-3 rounded-lg border border-slate-200 shadow-md ${colorClass}`;
+            
+            el.classList.remove('opacity-0');
+            setTimeout(() => {
+                el.classList.add('opacity-0');
+            }, 800);
+        }
+
+        function finishDrawing() {
+            const instruction = document.getElementById('instruction');
+            instruction.textContent = "完成しました";
+            instruction.className = "text-sm text-green-700 mt-2 font-bold";
+            
+            setTimeout(() => {
+                drawDrawer.drawQuadraticStandard(1, targetP, targetQ, '#2563eb');
+                document.getElementById('drawingExplanation').classList.remove('hidden');
+            }, 500);
+        }
+
+        function resetDrawing() {
+            step = 0;
+            userPoints = [];
+            drawDrawer.init();
+            document.getElementById('drawingExplanation').classList.add('hidden');
+            const instruction = document.getElementById('instruction');
+            instruction.textContent = "1. 頂点をタップしてください";
+            instruction.className = "text-sm text-slate-600 mt-2 font-bold";
+        }
+
+    </script>
+</body>
+</html>
