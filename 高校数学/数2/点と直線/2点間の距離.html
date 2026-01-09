@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数II：数直線上の距離（徹底解説）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.8;
+        }
+
+        .math-font {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+
+        /* カスタムカード */
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* 強調ボックス */
+        .highlight-box {
+            background-color: #f0f9ff;
+            border-left: 5px solid #0ea5e9;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0.5rem;
+        }
+
+        /* 吹き出し風解説 */
+        .bubble {
+            position: relative;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #cbd5e1 transparent;
+            display: block;
+            width: 0;
+        }
+
+        canvas {
+            touch-action: none; /* スマホでのスクロール防止 */
+        }
+    </style>
+</head>
+<body class="py-8 px-4 flex flex-col items-center">
+
+    <header class="w-full max-w-3xl mb-8 text-center">
+        <span class="text-blue-600 font-bold tracking-wider text-sm uppercase">Math II / Points and Lines</span>
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mt-2">数直線上の2点間の距離</h1>
+        <p class="text-slate-500 mt-2">なぜ「座標の差」で求められるのか？ 絶対値の意味とは？</p>
+    </header>
+
+    <main class="w-full max-w-3xl">
+
+        <!-- 解説セクション1：基本の考え方 -->
+        <section class="card">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <span class="bg-slate-800 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">1</span>
+                基本：距離は「大きい方引く小さい方」
+            </h2>
+            
+            <div class="space-y-4">
+                <p>
+                    数直線上の2点間の距離を考えるとき、最も基本的なルールはこれです。<br>
+                    <strong class="text-lg text-indigo-600 bg-indigo-50 px-2 py-1 rounded">距離 = （右側の座標） - （左側の座標）</strong>
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="bg-slate-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-slate-700 mb-2">例1：正の数同士</h3>
+                        <p>3 と 7 の距離は？</p>
+                        <p class="text-2xl font-mono text-center my-2 text-slate-600">7 - 3 = 4</p>
+                        <div class="text-xs text-center text-slate-400">（右）-（左）</div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-slate-700 mb-2">例2：負の数が混ざるとき</h3>
+                        <p>-2 と 3 の距離は？</p>
+                        <p class="text-2xl font-mono text-center my-2 text-slate-600">3 - (-2) = 5</p>
+                        <div class="text-xs text-center text-slate-400">マイナスを引く＝足す</div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h3 class="font-bold text-blue-700 mb-2">🤔 なぜ引き算なの？</h3>
+                    <p>
+                        「距離」とは、2つの値の「隔たり（ギャップ）」のことです。<br>
+                        数直線の「原点0からの位置」の差を取ることで、その間の長さが求まります。<br>
+                        例えば、<span class="math-font">3 - (-2)</span> は、「3まで行って、さらに反対側の2分もカウントする」ことになるので、結果的に <span class="math-font">3 + 2 = 5</span> となり、直感的な「長さ」と一致します。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解説セクション2：絶対値の導入 -->
+        <section class="card">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <span class="bg-slate-800 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">2</span>
+                公式化：どちらが大きいか分からないときは？
+            </h2>
+
+            <p class="mb-4">
+                一般的に、2点 <span class="math-font">A(a)</span>, <span class="math-font">B(b)</span> の距離を求めたいとき、
+                <span class="math-font">a</span> と <span class="math-font">b</span> のどちらが大きいか（どちらが右にあるか）分からないことがあります。
+            </p>
+
+            <div class="bubble">
+                もし <span class="math-font">a > b</span> なのに <span class="math-font">b - a</span> を計算してしまうと、答えがマイナスになってしまいます。<br>
+                距離にマイナスはありません！（「学校までの距離が -500m」とは言いませんよね？）
+            </div>
+
+            <p class="mb-4">
+                そこで登場するのが<strong>絶対値記号 | |</strong> です。<br>
+                これは「中身がマイナスならプラスに変える（符号を無視する）」という便利な道具です。<br>
+                これを使えば、どっちからどっちを引いても正解になります。
+            </p>
+
+            <div class="text-center bg-blue-50 border border-blue-200 rounded-xl p-6 my-6">
+                <p class="text-sm text-blue-600 font-bold mb-2">数直線上の2点 A(a), B(b) 間の距離 AB</p>
+                <div class="text-3xl font-bold text-slate-800 font-mono">
+                    AB = | b - a |
+                </div>
+                <p class="text-xs text-slate-500 mt-2">※ | a - b | と書いても同じです。</p>
+            </div>
+        </section>
+
+        <!-- インタラクティブ・シミュレーター -->
+        <section class="card border-2 border-indigo-100">
+            <h2 class="text-xl font-bold text-indigo-700 mb-4 flex items-center">
+                🎮 実験してみよう
+            </h2>
+            <p class="text-sm text-slate-600 mb-4">
+                スライダーを動かして2点A, Bを移動させてください。<br>
+                <strong>「引き算の順序が変わっても、絶対値をつければ結果は同じ」</strong>であることを確認しましょう。
+            </p>
+
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- コントローラー -->
+                <div class="w-full md:w-1/3 space-y-6">
+                    <div>
+                        <label class="flex justify-between font-bold text-green-700 mb-2">
+                            点 A (a)
+                            <span id="val-a" class="bg-green-100 px-2 rounded">-2</span>
+                        </label>
+                        <input type="range" min="-5" max="5" value="-2" step="1" id="input-a" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600" oninput="updateSimulator()">
+                    </div>
+
+                    <div>
+                        <label class="flex justify-between font-bold text-red-700 mb-2">
+                            点 B (b)
+                            <span id="val-b" class="bg-red-100 px-2 rounded">3</span>
+                        </label>
+                        <input type="range" min="-5" max="5" value="3" step="1" id="input-b" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-600" oninput="updateSimulator()">
+                    </div>
+
+                    <div class="bg-slate-800 text-white p-4 rounded-lg text-sm font-mono space-y-2">
+                        <p class="border-b border-slate-600 pb-1 mb-1 text-xs text-slate-400">計算プロセス</p>
+                        
+                        <!-- 式1: b - a -->
+                        <div class="flex justify-between items-center">
+                            <span>b - a = </span>
+                            <span><span id="calc-b">3</span> - (<span id="calc-a">-2</span>) = <span id="res-ba" class="text-yellow-400">5</span></span>
+                        </div>
+                        
+                        <!-- 式2: a - b -->
+                        <div class="flex justify-between items-center text-slate-400">
+                            <span>a - b = </span>
+                            <span><span id="calc-a2">-2</span> - (<span id="calc-b2">3</span>) = <span id="res-ab">-5</span></span>
+                        </div>
+
+                        <!-- 結論 -->
+                        <div class="pt-2 mt-2 border-t border-slate-600 text-center">
+                            <span class="text-xs text-slate-300">絶対値をとると...</span><br>
+                            <span class="text-xl font-bold text-yellow-400">距離 = <span id="final-dist">5</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- キャンバス -->
+                <div class="w-full md:w-2/3 flex justify-center items-center bg-white rounded-xl border border-slate-200 p-2">
+                    <canvas id="mainCanvas" width="400" height="250"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- 練習問題 -->
+        <section class="card bg-yellow-50 border-yellow-200">
+            <h2 class="text-lg font-bold text-yellow-800 mb-4 flex items-center">
+                ✍️ 理解度チェック
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 問1 -->
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <p class="font-bold text-slate-700 mb-2">問1</p>
+                    <p class="mb-3 text-sm">2点 A(2), B(8) 間の距離は？</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="q1" class="border rounded p-1 w-20 text-center" placeholder="答え">
+                        <button onclick="checkAnswer(1, 6)" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">判定</button>
+                    </div>
+                    <p id="msg-1" class="text-xs mt-2 font-bold h-4"></p>
+                </div>
+
+                <!-- 問2 -->
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <p class="font-bold text-slate-700 mb-2">問2</p>
+                    <p class="mb-3 text-sm">2点 C(-3), D(4) 間の距離は？</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="q2" class="border rounded p-1 w-20 text-center" placeholder="答え">
+                        <button onclick="checkAnswer(2, 7)" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">判定</button>
+                    </div>
+                    <p id="msg-2" class="text-xs mt-2 font-bold h-4"></p>
+                </div>
+
+                <!-- 問3 -->
+                <div class="bg-white p-4 rounded-lg shadow-sm md:col-span-2">
+                    <p class="font-bold text-slate-700 mb-2">問3 (応用)</p>
+                    <p class="mb-3 text-sm">2点 P(-5), Q(-1) 間の距離は？ <span class="text-slate-400 text-xs">（ヒント：大きい方はどっち？）</span></p>
+                    <div class="flex gap-2">
+                        <input type="text" id="q3" class="border rounded p-1 w-20 text-center" placeholder="答え">
+                        <button onclick="checkAnswer(3, 4)" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">判定</button>
+                    </div>
+                    <p id="msg-3" class="text-xs mt-2 font-bold h-4"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center text-slate-400 text-xs py-8">
+        数II 数直線上の距離 | 学習アシスタント
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('mainCanvas');
+        const ctx = canvas.getContext('2d');
+        const GRID = 35; // 1目盛りの幅
+        
+        let a = -2;
+        let b = 3;
+
+        function updateSimulator() {
+            a = parseInt(document.getElementById('input-a').value);
+            b = parseInt(document.getElementById('input-b').value);
+
+            // 数値表示の更新
+            document.getElementById('val-a').innerText = a;
+            document.getElementById('val-b').innerText = b;
+
+            document.getElementById('calc-a').innerText = a < 0 ? `(${a})` : a;
+            document.getElementById('calc-b').innerText = b;
+            document.getElementById('res-ba').innerText = b - a;
+
+            document.getElementById('calc-a2').innerText = a;
+            document.getElementById('calc-b2').innerText = b < 0 ? `(${b})` : b;
+            document.getElementById('res-ab').innerText = a - b;
+
+            document.getElementById('final-dist').innerText = Math.abs(b - a);
+
+            draw();
+        }
+
+        function draw() {
+            const w = canvas.width;
+            const h = canvas.height;
+            const centerY = h * 0.6;
+            const centerX = w / 2;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // 1. 数直線の描画
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(10, centerY);
+            ctx.lineTo(w - 10, centerY);
+            ctx.stroke();
+
+            // 2. 目盛りの描画 (-5 ~ 5)
+            ctx.font = '12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            for (let i = -5; i <= 5; i++) {
+                const x = centerX + i * GRID;
+                
+                // 目盛り線
+                ctx.beginPath();
+                ctx.moveTo(x, centerY - 5);
+                ctx.lineTo(x, centerY + 5);
+                ctx.strokeStyle = (i === 0) ? '#334155' : '#cbd5e1'; // 0だけ濃く
+                ctx.lineWidth = (i === 0) ? 2 : 1;
+                ctx.stroke();
+
+                // 数字
+                ctx.fillStyle = '#64748b';
+                ctx.fillText(i, x, centerY + 10);
+            }
+
+            // 3. 座標からキャンバス上のX座標を計算する関数
+            const getX = (val) => centerX + val * GRID;
+
+            const ax = getX(a);
+            const bx = getX(b);
+            const dist = Math.abs(b - a);
+
+            // 4. 距離を示すアーチとラベル
+            if (dist > 0) {
+                const midX = (ax + bx) / 2;
+                const arcHeight = 40;
+                const topY = centerY - arcHeight;
+
+                // 範囲ライン
+                ctx.beginPath();
+                ctx.moveTo(ax, centerY - 10);
+                ctx.lineTo(ax, topY);
+                ctx.lineTo(bx, topY);
+                ctx.lineTo(bx, centerY - 10);
+                ctx.strokeStyle = '#eab308'; // yellow-500
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // 距離ラベル背景
+                ctx.fillStyle = '#fefce8';
+                ctx.fillRect(midX - 30, topY - 15, 60, 30);
+                
+                // 距離ラベル文字
+                ctx.fillStyle = '#854d0e'; // yellow-800
+                ctx.font = 'bold 16px sans-serif';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`距離: ${dist}`, midX, topY);
+                
+                // 差の説明（どっちからどっちを引いたか）
+                ctx.font = '10px sans-serif';
+                ctx.fillStyle = '#ca8a04';
+                const subText = (b >= a) ? `${b} - (${a})` : `${a} - (${b})`;
+                ctx.fillText(subText, midX, topY + 15);
+            } else {
+                // 重なっている場合
+                ctx.fillStyle = '#854d0e';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText("距離: 0", ax, centerY - 40);
+            }
+
+            // 5. 点Aの描画
+            ctx.fillStyle = '#16a34a'; // green
+            ctx.beginPath();
+            ctx.arc(ax, centerY, 6, 0, Math.PI * 2);
+            ctx.fill();
+            // ラベルA
+            ctx.fillStyle = '#14532d';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.fillText('A', ax, centerY - 20);
+
+            // 6. 点Bの描画
+            ctx.fillStyle = '#dc2626'; // red
+            ctx.beginPath();
+            ctx.arc(bx, centerY, 6, 0, Math.PI * 2);
+            ctx.fill();
+            // ラベルB
+            ctx.fillStyle = '#7f1d1d';
+            ctx.fillText('B', bx, centerY - 20);
+        }
+
+        function checkAnswer(qId, correctVal) {
+            const input = document.getElementById(`q${qId}`).value;
+            const msg = document.getElementById(`msg-${qId}`);
+            
+            if (parseInt(input) === correctVal) {
+                msg.innerText = "⭕ 正解！";
+                msg.className = "text-xs mt-2 font-bold h-4 text-green-600";
+            } else {
+                msg.innerText = "❌ 惜しい！";
+                msg.className = "text-xs mt-2 font-bold h-4 text-red-500";
+            }
+        }
+
+        // 初期描画
+        window.onload = updateSimulator;
+
+    </script>
+</body>
+</html>
