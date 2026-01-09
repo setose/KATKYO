@@ -506,4 +506,512 @@
         root.render(<App />);
     </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学II：2点間の距離</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- KaTeX (数式表示ライブラリ) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" xintegrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" xintegrity="sha384-XjKyOOdBnHPvxs8D9m57fuP698Bns75dMem06vJao7HnvrA42yV1XXfT9e3+M6+f" crossorigin="anonymous"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f1f5f9;
+            scroll-behavior: smooth;
+        }
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            margin-top: -8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+
+        // KaTeXを使った数式表示コンポーネント
+        const MathTex = ({ children, block = false }) => {
+            const containerRef = useRef(null);
+
+            useEffect(() => {
+                if (window.katex && containerRef.current) {
+                    try {
+                        window.katex.render(children, containerRef.current, {
+                            throwOnError: false,
+                            displayMode: block
+                        });
+                    } catch (e) {
+                        console.error("KaTeX error:", e);
+                        containerRef.current.innerText = children;
+                    }
+                } else {
+                    // KaTeXがロードされていない場合のフォールバック（または再試行ロジック）
+                    const timer = setInterval(() => {
+                        if (window.katex && containerRef.current) {
+                            window.katex.render(children, containerRef.current, {
+                                throwOnError: false,
+                                displayMode: block
+                            });
+                            clearInterval(timer);
+                        }
+                    }, 100);
+                    return () => clearInterval(timer);
+                }
+            }, [children, block]);
+
+            return <span ref={containerRef} className={block ? "block my-2" : "inline-block"} />;
+        };
+
+        const Icon = ({ name, size = 20, color = "currentColor", className="" }) => {
+            useEffect(() => {
+                lucide.createIcons();
+            }, [name]);
+            return <i data-lucide={name} width={size} height={size} stroke={color} className={className}></i>;
+        };
+
+        const App = () => {
+            return (
+                <div className="min-h-screen flex flex-col items-center pb-20">
+                    <header className="w-full bg-indigo-700 text-white p-4 shadow-lg sticky top-0 z-50">
+                        <div className="max-w-4xl mx-auto flex justify-between items-center">
+                            <h1 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                                <Icon name="ruler" size={24} color="white" />
+                                数学II：2点間の距離
+                            </h1>
+                        </div>
+                    </header>
+
+                    <main className="w-full max-w-4xl mt-8 px-4 space-y-12">
+                        {/* 1. 解説 */}
+                        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div className="bg-indigo-50 px-6 py-4 border-b border-indigo-100 flex items-center gap-2">
+                                <span className="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                                <h2 className="text-xl font-bold text-indigo-900">解説と公式</h2>
+                            </div>
+                            <div className="p-6 md:p-8">
+                                <ExplanationSection />
+                            </div>
+                        </section>
+
+                        {/* 2. シミュレーター */}
+                        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div className="bg-blue-50 px-6 py-4 border-b border-blue-100 flex items-center gap-2">
+                                <span className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                                <h2 className="text-xl font-bold text-blue-900">シミュレーター</h2>
+                            </div>
+                            <div className="p-6 md:p-8">
+                                <SimulatorSection />
+                            </div>
+                        </section>
+
+                        {/* 3. 練習問題 */}
+                        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div className="bg-green-50 px-6 py-4 border-b border-green-100 flex items-center gap-2">
+                                <span className="bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                                <h2 className="text-xl font-bold text-green-900">練習問題</h2>
+                            </div>
+                            <div className="p-6 md:p-8">
+                                <QuizSection />
+                            </div>
+                        </section>
+                    </main>
+
+                    <footer className="mt-20 text-slate-500 text-sm p-4 text-center">
+                        © 2024 Math II Study Assistant
+                    </footer>
+                </div>
+            );
+        };
+
+        const ExplanationSection = () => (
+            <div className="space-y-6">
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100">
+                    <p className="font-bold text-lg text-blue-900 mb-2 flex items-center gap-2">
+                        <Icon name="bookmark" size={20} className="text-blue-600"/> 公式
+                    </p>
+                    <p className="text-slate-700 leading-relaxed mb-4">
+                        2点 <MathTex>A(x_1, y_1)</MathTex>, <MathTex>B(x_2, y_2)</MathTex> 間の距離 <MathTex>AB</MathTex> は、次の式で求められます。
+                    </p>
+                    <div className="text-center py-4 bg-white rounded-xl shadow-sm border border-indigo-100 overflow-x-auto">
+                        <MathTex block>{`AB = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}`}</MathTex>
+                    </div>
+                    <div className="mt-4 bg-white/60 p-3 rounded-lg inline-block text-sm text-slate-700">
+                        <span className="font-bold text-indigo-600 mr-2">Point!</span>
+                         原点 <MathTex>O(0, 0)</MathTex> と点 <MathTex>P(x, y)</MathTex> の距離は、
+                        <span className="font-bold mx-2"><MathTex>{`OP = \\sqrt{x^2 + y^2}`}</MathTex></span> となります。
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8 mt-8">
+                    <div>
+                        <h3 className="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2 border-b pb-2">
+                            なぜこの式になるの？
+                        </h3>
+                        <p className="text-slate-600 leading-relaxed mb-4">
+                            これは中学校で習った<span className="font-bold text-indigo-600 bg-indigo-50 px-1">三平方の定理（ピタゴラスの定理）</span>そのものです。
+                        </p>
+                        <ul className="space-y-3 text-slate-700 ml-1">
+                            <li className="flex items-center gap-2">
+                                <span className="w-2 h-2 bg-slate-400 rounded-full shrink-0"></span>
+                                <span>横の長さ（底辺）は <MathTex>{`|x_2 - x_1|`}</MathTex></span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <span className="w-2 h-2 bg-slate-400 rounded-full shrink-0"></span>
+                                <span>縦の長さ（高さ）は <MathTex>{`|y_2 - y_1|`}</MathTex></span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <span className="w-2 h-2 bg-indigo-400 rounded-full shrink-0"></span>
+                                <span>斜辺（距離 <MathTex>d</MathTex>）は <MathTex>{`d^2 = (\\text{横})^2 + (\\text{縦})^2`}</MathTex></span>
+                            </li>
+                        </ul>
+                        <div className="mt-6 bg-yellow-50 p-4 rounded-lg text-sm text-yellow-800 border border-yellow-200">
+                            💡 2乗するので、中身がマイナスでも結果はプラスになります。<br/>
+                            <span className="font-bold">「引いて、2乗して、足して、ルート」</span>と覚えましょう！
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-center bg-slate-50 rounded-xl p-6 border border-slate-200">
+                        {/* SVG図解 */}
+                        <svg viewBox="0 0 200 150" className="w-full h-auto max-w-[320px] drop-shadow-sm">
+                            <defs>
+                                <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                    <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8" />
+                                </marker>
+                            </defs>
+                            <line x1="10" y1="130" x2="190" y2="130" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow)" />
+                            <line x1="20" y1="140" x2="20" y2="10" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#arrow)" />
+                            <text x="180" y="145" fontSize="10" fill="#64748b">x</text>
+                            <text x="10" y="20" fontSize="10" fill="#64748b">y</text>
+                            
+                            <path d="M50 100 L150 40 L150 100 Z" fill="#e0e7ff" stroke="none" />
+                            <line x1="50" y1="100" x2="150" y2="40" stroke="#4f46e5" strokeWidth="3" />
+                            <line x1="50" y1="100" x2="150" y2="100" stroke="#94a3b8" strokeDasharray="4" />
+                            <line x1="150" y1="100" x2="150" y2="40" stroke="#94a3b8" strokeDasharray="4" />
+
+                            <circle cx="50" cy="100" r="4" fill="#ef4444" />
+                            <circle cx="150" cy="40" r="4" fill="#ef4444" />
+
+                            <text x="30" y="115" fontSize="12" fontWeight="bold" fill="#334155">A</text>
+                            <text x="155" y="35" fontSize="12" fontWeight="bold" fill="#334155">B</text>
+                            <text x="90" y="115" fontSize="10" fill="#64748b">x₂-x₁</text>
+                            <text x="155" y="80" fontSize="10" fill="#64748b">y₂-y₁</text>
+                            <text x="85" y="65" fontSize="14" fontWeight="bold" fill="#4f46e5">d</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const SimulatorSection = () => {
+            const [p1, setP1] = useState({ x: 1, y: 1 });
+            const [p2, setP2] = useState({ x: 5, y: 4 });
+
+            // 距離計算
+            const diffX = p2.x - p1.x;
+            const diffY = p2.y - p1.y;
+            const distSq = diffX * diffX + diffY * diffY;
+            const dist = Math.sqrt(distSq).toFixed(2);
+            const isInteger = Number.isInteger(Math.sqrt(distSq));
+
+            // 数式文字列を生成
+            const formulaStr = useMemo(() => {
+                const term1 = diffX < 0 ? `(${diffX})^2` : `${diffX}^2`;
+                const term2 = diffY < 0 ? `(${diffY})^2` : `${diffY}^2`;
+                
+                let result = `\\begin{aligned}
+                    AB &= \\sqrt{(${p2.x} - ${p1.x})^2 + (${p2.y} - ${p1.y})^2} \\\\
+                       &= \\sqrt{${term1} + ${term2}} \\\\
+                       &= \\sqrt{${diffX*diffX} + ${diffY*diffY}} \\\\
+                       &= \\sqrt{${distSq}}
+                \\end{aligned}`;
+                
+                return result;
+            }, [p1, p2, diffX, diffY, distSq]);
+
+            const toSvgX = (x) => ((x - (-2)) / (12 - (-2))) * 100 + "%";
+            const toSvgY = (y) => (100 - ((y - (-2)) / (12 - (-2))) * 100) + "%";
+
+            return (
+                <div>
+                    <p className="text-slate-600 mb-6">
+                        以下のスライダーを動かして、点Aと点Bの位置を変えてみましょう。<br/>
+                        座標の変化に合わせて、計算式と図形がリアルタイムに変化します。
+                    </p>
+
+                    <div className="grid lg:grid-cols-2 gap-8">
+                        <div className="space-y-6">
+                            <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                                {/* 点A */}
+                                <div className="mb-6">
+                                    <h3 className="font-bold text-red-600 mb-3 flex items-center gap-2">
+                                        <div className="w-3 h-3 bg-red-500 rounded-full"></div> 点 A <MathTex>{`(x_1, y_1)`}</MathTex>
+                                    </h3>
+                                    <div className="space-y-4 pl-4 border-l-2 border-red-200">
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-6 font-mono text-slate-500 font-bold">x₁</span>
+                                            <input 
+                                                type="range" min="-1" max="10" step="1" 
+                                                value={p1.x} onChange={(e) => setP1({...p1, x: parseInt(e.target.value)})}
+                                                className="flex-1 accent-red-500"
+                                            />
+                                            <span className="w-8 text-right font-bold bg-white px-2 py-1 rounded shadow-sm">{p1.x}</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-6 font-mono text-slate-500 font-bold">y₁</span>
+                                            <input 
+                                                type="range" min="-1" max="10" step="1" 
+                                                value={p1.y} onChange={(e) => setP1({...p1, y: parseInt(e.target.value)})}
+                                                className="flex-1 accent-red-500"
+                                            />
+                                            <span className="w-8 text-right font-bold bg-white px-2 py-1 rounded shadow-sm">{p1.y}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 点B */}
+                                <div>
+                                    <h3 className="font-bold text-blue-600 mb-3 flex items-center gap-2">
+                                        <div className="w-3 h-3 bg-blue-500 rounded-full"></div> 点 B <MathTex>{`(x_2, y_2)`}</MathTex>
+                                    </h3>
+                                    <div className="space-y-4 pl-4 border-l-2 border-blue-200">
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-6 font-mono text-slate-500 font-bold">x₂</span>
+                                            <input 
+                                                type="range" min="-1" max="10" step="1" 
+                                                value={p2.x} onChange={(e) => setP2({...p2, x: parseInt(e.target.value)})}
+                                                className="flex-1 accent-blue-500"
+                                            />
+                                            <span className="w-8 text-right font-bold bg-white px-2 py-1 rounded shadow-sm">{p2.x}</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-6 font-mono text-slate-500 font-bold">y₂</span>
+                                            <input 
+                                                type="range" min="-1" max="10" step="1" 
+                                                value={p2.y} onChange={(e) => setP2({...p2, y: parseInt(e.target.value)})}
+                                                className="flex-1 accent-blue-500"
+                                            />
+                                            <span className="w-8 text-right font-bold bg-white px-2 py-1 rounded shadow-sm">{p2.y}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 計算結果表示 */}
+                            <div className="bg-indigo-900 text-white p-5 rounded-xl shadow-lg relative overflow-hidden min-h-[200px] flex flex-col justify-center">
+                                <div className="absolute top-0 right-0 p-2 opacity-10">
+                                    <Icon name="calculator" size={64} />
+                                </div>
+                                <p className="text-xs text-indigo-300 font-bold uppercase tracking-wider mb-2">Calculation</p>
+                                <div className="text-lg relative z-10 overflow-x-auto">
+                                    <MathTex block>{formulaStr}</MathTex>
+                                    <div className="mt-2 text-right">
+                                        <span className="text-xl md:text-2xl font-bold text-yellow-400">
+                                             {isInteger ? `= ${Math.sqrt(distSq)}` : `≒ ${dist}`}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* グラフ表示 */}
+                        <div className="aspect-square bg-white border border-slate-200 rounded-xl relative overflow-hidden shadow-inner cursor-crosshair">
+                            {/* グリッド背景 */}
+                            <div className="absolute inset-0 grid grid-cols-[repeat(14,1fr)] grid-rows-[repeat(14,1fr)] opacity-10 pointer-events-none">
+                                {[...Array(196)].map((_, i) => <div key={i} className="border border-slate-400"></div>)}
+                            </div>
+
+                            <div className="absolute left-[14.28%] top-0 bottom-0 w-0.5 bg-slate-400"></div>
+                            <div className="absolute top-[85.71%] left-0 right-0 h-0.5 bg-slate-400"></div>
+                            <div className="absolute left-[15%] top-[86%] text-xs text-slate-500 font-mono">O</div>
+
+                            <div className="absolute inset-0 w-full h-full">
+                                <svg className="w-full h-full absolute inset-0 pointer-events-none">
+                                    <line 
+                                        x1={toSvgX(p1.x)} y1={toSvgY(p1.y)} 
+                                        x2={toSvgX(p2.x)} y2={toSvgY(p1.y)} 
+                                        stroke="#94a3b8" strokeWidth="2" strokeDasharray="5,5" 
+                                    />
+                                    <line 
+                                        x1={toSvgX(p2.x)} y1={toSvgY(p1.y)} 
+                                        x2={toSvgX(p2.x)} y2={toSvgY(p2.y)} 
+                                        stroke="#94a3b8" strokeWidth="2" strokeDasharray="5,5" 
+                                    />
+                                    <line 
+                                        x1={toSvgX(p1.x)} y1={toSvgY(p1.y)} 
+                                        x2={toSvgX(p2.x)} y2={toSvgY(p2.y)} 
+                                        stroke="#4f46e5" strokeWidth="3" 
+                                    />
+                                </svg>
+
+                                <div 
+                                    className="absolute w-4 h-4 bg-red-500 rounded-full shadow-lg transform -translate-x-1/2 -translate-y-1/2 border-2 border-white flex items-center justify-center transition-all duration-75"
+                                    style={{ left: toSvgX(p1.x), top: toSvgY(p1.y) }}
+                                >
+                                    <span className="absolute -top-7 bg-red-600 text-white text-xs px-2 py-1 rounded shadow whitespace-nowrap z-20">A({p1.x}, {p1.y})</span>
+                                </div>
+                                <div 
+                                    className="absolute w-4 h-4 bg-blue-500 rounded-full shadow-lg transform -translate-x-1/2 -translate-y-1/2 border-2 border-white flex items-center justify-center transition-all duration-75"
+                                    style={{ left: toSvgX(p2.x), top: toSvgY(p2.y) }}
+                                >
+                                    <span className="absolute -top-7 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow whitespace-nowrap z-20">B({p2.x}, {p2.y})</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const QuizSection = () => {
+            const questions = [
+                {
+                    id: 1,
+                    text: "2点 A(1, 2), B(4, 6) の間の距離を求めよ。",
+                    hint: "xの差は3, yの差は4です。",
+                    answer: "5",
+                    solutionTex: "AB = \\sqrt{(4-1)^2 + (6-2)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9+16} = \\sqrt{25} = 5"
+                },
+                {
+                    id: 2,
+                    text: "原点 O(0, 0) と点 P(5, -12) の距離を求めよ。",
+                    hint: "原点との距離は √(x² + y²) です。",
+                    answer: "13",
+                    solutionTex: "OP = \\sqrt{5^2 + (-12)^2} = \\sqrt{25 + 144} = \\sqrt{169} = 13"
+                },
+                {
+                    id: 3,
+                    text: "2点 A(-1, 3), B(2, -1) の間の距離を求めよ。",
+                    hint: "符号に注意！ (2 - (-1)) は 3 です。",
+                    answer: "5",
+                    solutionTex: "AB = \\sqrt{(2-(-1))^2 + (-1-3)^2} = \\sqrt{3^2 + (-4)^2} = \\sqrt{9+16} = 5"
+                }
+            ];
+
+            return (
+                <div className="max-w-3xl mx-auto">
+                    <p className="text-center text-slate-600 mb-8">
+                        最後に、今日学んだことを確認しましょう。<br/>
+                        すべて整数で答えられる問題です。
+                    </p>
+                    <div className="space-y-6">
+                        {questions.map((q, index) => (
+                            <QuizItem key={q.id} question={q} index={index + 1} />
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const QuizItem = ({ question, index }) => {
+            const [userAnswer, setUserAnswer] = useState("");
+            const [status, setStatus] = useState("unanswered");
+
+            const checkAnswer = () => {
+                if (userAnswer.trim() === question.answer) {
+                    setStatus("correct");
+                } else {
+                    setStatus("incorrect");
+                }
+            };
+
+            return (
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 transition-all">
+                    <div className="flex items-start gap-4">
+                        <div className="bg-indigo-600 text-white w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm mt-0.5">
+                            Q{index}
+                        </div>
+                        <div className="flex-1 w-full">
+                            <h3 className="font-bold text-lg text-slate-800 mb-4">{question.text}</h3>
+                            
+                            <div className="flex items-start gap-3 flex-wrap sm:flex-nowrap mb-3">
+                                <div className="flex-1 w-full sm:w-auto">
+                                    <div className="relative">
+                                        <input 
+                                            type="tel" 
+                                            placeholder="答えを入力" 
+                                            value={userAnswer}
+                                            onChange={(e) => setUserAnswer(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && checkAnswer()}
+                                            disabled={status === "correct"}
+                                            className={`w-full p-3 pr-10 border rounded-lg outline-none transition-colors font-mono text-lg
+                                                ${status === "incorrect" ? "border-red-300 bg-red-50" : "border-slate-300 focus:border-indigo-500 bg-white"}
+                                                ${status === "correct" ? "border-green-500 bg-green-50 text-green-700 font-bold" : ""}
+                                            `}
+                                        />
+                                        {status === "correct" && (
+                                            <div className="absolute right-3 top-3 text-green-600">
+                                                <Icon name="check" size={24} />
+                                            </div>
+                                        )}
+                                    </div>
+                                    
+                                    {status === "incorrect" && (
+                                        <p className="text-red-500 text-sm mt-2 flex items-center gap-1 font-bold animate-pulse">
+                                            <Icon name="x-circle" size={16} /> 
+                                            ヒント: {question.hint}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <button 
+                                    onClick={checkAnswer}
+                                    disabled={status === "correct" || !userAnswer}
+                                    className={`px-6 py-3 rounded-lg font-bold shadow-sm transition-all whitespace-nowrap w-full sm:w-auto
+                                        ${status === "correct" 
+                                            ? "bg-green-500 text-white cursor-default" 
+                                            : "bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"}
+                                    `}
+                                >
+                                    {status === "correct" ? "正解！" : "採点する"}
+                                </button>
+                            </div>
+
+                            {status === "correct" && (
+                                <div className="mt-4 p-4 bg-white border border-green-200 rounded-lg animate-fade-in text-slate-700 shadow-sm overflow-x-auto">
+                                    <p className="font-bold text-xs text-green-600 mb-1 uppercase tracking-wide">解説</p>
+                                    <MathTex block>{question.solutionTex}</MathTex>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
 </html>
