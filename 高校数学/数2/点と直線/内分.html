@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数II：数直線上の内分点</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        /* 数式用のフォント設定 */
+        .math-font {
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .variable {
+            font-style: italic;
+        }
+        
+        /* 分数表示用スタイル */
+        .fraction {
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 0.2em;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .fraction > span {
+            display: block;
+            padding: 0.1em;
+        }
+        .fraction span.numerator {
+            border-bottom: 1px solid currentColor;
+        }
+        .fraction span.denominator {
+            border-top: 0px;
+        }
+
+        .highlight-m { color: #ef4444; font-weight: bold; } /* Red for m */
+        .highlight-n { color: #3b82f6; font-weight: bold; } /* Blue for n */
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #4F46E5;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #d1d5db;
+            border-radius: 2px;
+        }
+
+        /* アニメーション用 */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-teal-600 text-white p-6 shadow-md">
+        <div class="max-w-4xl mx-auto flex items-center gap-3">
+            <i class="fas fa-ruler-horizontal text-3xl"></i>
+            <div>
+                <h1 class="text-2xl font-bold">数学II：数直線上の内分</h1>
+                <p class="text-teal-100 text-sm">1次元（数直線）での点の位置関係を理解しよう</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 space-y-8">
+
+        <!-- 解説セクション -->
+        <section class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-teal-500">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i class="fas fa-book-open text-teal-500"></i> ポイントの解説
+            </h2>
+            
+            <div class="mb-6 leading-relaxed">
+                <p class="mb-4">
+                    数直線上の2点 
+                    <span class="math-font">A(<span class="variable">a</span>)</span>, 
+                    <span class="math-font">B(<span class="variable">b</span>)</span> 
+                    を結ぶ線分ABを 
+                    <span class="math-font"><span class="variable highlight-m">m</span> : <span class="variable highlight-n">n</span></span> 
+                    に内分する点 
+                    <span class="math-font">P(<span class="variable">x</span>)</span> 
+                    の座標は、次の公式で求められます。
+                </p>
+                
+                <div class="bg-gray-50 p-6 rounded-lg flex flex-col items-center justify-center my-4 border border-gray-200 shadow-sm">
+                    <div class="text-2xl math-font mb-4">
+                        <span class="variable">x</span> = 
+                        <div class="fraction">
+                            <span class="numerator"><span class="variable highlight-n">n</span><span class="variable">a</span> + <span class="variable highlight-m">m</span><span class="variable">b</span></span>
+                            <span class="denominator"><span class="variable highlight-m">m</span> + <span class="variable highlight-n">n</span></span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 bg-yellow-50 px-4 py-3 rounded border border-yellow-200 flex items-start gap-3">
+                        <i class="fas fa-lightbulb text-yellow-500 mt-1 text-lg"></i>
+                        <span>
+                            <strong class="text-gray-800 block mb-1">覚え方：「たすき掛け」のイメージ</strong>
+                            遠くの数同士をクロスして掛け合わせます。<br>
+                            点A(<span class="variable font-serif">a</span>) には遠い方の比 <span class="variable highlight-n font-serif font-bold">n</span> を掛け、<br>
+                            点B(<span class="variable font-serif">b</span>) には遠い方の比 <span class="variable highlight-m font-serif font-bold">m</span> を掛けます。
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- インタラクティブ・シミュレーター -->
+        <section class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i class="fas fa-flask text-teal-600"></i> 実験室：数直線シミュレーター
+            </h2>
+            <p class="text-sm text-gray-600 mb-6">スライダーを動かして、点Pの位置の変化を確認しましょう。<span class="math-font variable">m</span> と <span class="math-font variable">n</span> が変わると、点Pはどちらに寄るでしょうか？</p>
+
+            <!-- キャンバス -->
+            <div class="flex justify-center items-center bg-white border-2 border-gray-100 rounded-xl overflow-hidden relative mb-6 shadow-inner" style="height: 250px;">
+                <canvas id="numberLineCanvas" width="800" height="250" class="w-full h-full"></canvas>
+            </div>
+
+            <!-- コントロールパネル -->
+            <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- 比率設定 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-500 mb-3 uppercase tracking-wider">比率の設定 (m : n)</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-bold highlight-m">m (Aからの比)</span>
+                                    <span class="text-sm font-bold highlight-m" id="disp-m">3</span>
+                                </div>
+                                <input type="range" id="input-m" min="1" max="9" value="3" class="w-full bg-red-100 h-2 rounded-lg">
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-bold highlight-n">n (Bからの比)</span>
+                                    <span class="text-sm font-bold highlight-n" id="disp-n">2</span>
+                                </div>
+                                <input type="range" id="input-n" min="1" max="9" value="2" class="w-full bg-blue-100 h-2 rounded-lg">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 座標設定 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-500 mb-3 uppercase tracking-wider">座標の設定</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">点 A の座標 (<span class="variable font-serif">a</span>)</label>
+                                <input type="number" id="input-a" value="-4" class="w-full p-2 border border-gray-300 rounded text-center text-lg font-bold text-gray-700 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">点 B の座標 (<span class="variable font-serif">b</span>)</label>
+                                <input type="number" id="input-b" value="6" class="w-full p-2 border border-gray-300 rounded text-center text-lg font-bold text-gray-700 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none font-mono">
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 bg-teal-50 border border-teal-200 rounded p-3 text-center">
+                            <span class="text-xs text-teal-800 font-bold block mb-1">計算結果：点 P の座標</span>
+                            <span id="result-text" class="text-2xl font-bold text-teal-700 font-mono">2.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 練習問題 -->
+        <section class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i class="fas fa-pencil-alt text-yellow-500"></i> 練習問題
+            </h2>
+            <div id="quiz-container" class="space-y-4">
+                <!-- 問題がJSでここに挿入されます -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center p-6 text-gray-500 text-sm">
+        &copy; 数学II 学習支援ツール
+    </footer>
+
+    <script>
+        // --- 描画とシミュレーションのロジック ---
+        const canvas = document.getElementById('numberLineCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width;
+        let height = canvas.height;
+
+        // リサイズ対応
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            width = canvas.width;
+            height = canvas.height;
+            update();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        // 入力要素
+        const inputs = {
+            m: document.getElementById('input-m'),
+            n: document.getElementById('input-n'),
+            a: document.getElementById('input-a'),
+            b: document.getElementById('input-b'),
+        };
+
+        const displays = {
+            m: document.getElementById('disp-m'),
+            n: document.getElementById('disp-n'),
+            result: document.getElementById('result-text'),
+        };
+
+        // 状態
+        let state = { m: 3, n: 2, a: -4, b: 6 };
+
+        // 座標変換：数直線の値をキャンバスのX座標に変換
+        // 範囲を動的に調整するために少しマージンを持たせる
+        function toScreenX(val) {
+            const minVal = Math.min(state.a, state.b) - 2;
+            const maxVal = Math.max(state.a, state.b) + 2;
+            const range = maxVal - minVal;
+            
+            // パディング
+            const padding = 60;
+            const drawWidth = width - (padding * 2);
+            
+            return padding + ((val - minVal) / range) * drawWidth;
+        }
+
+        function drawNumberLine() {
+            ctx.clearRect(0, 0, width, height);
+            
+            const axisY = height / 2 + 20;
+
+            // 数直線の線
+            ctx.beginPath();
+            ctx.moveTo(20, axisY);
+            ctx.lineTo(width - 20, axisY);
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 矢印の先端
+            ctx.beginPath();
+            ctx.moveTo(width - 20, axisY);
+            ctx.lineTo(width - 30, axisY - 5);
+            ctx.lineTo(width - 30, axisY + 5);
+            ctx.fillStyle = '#374151';
+            ctx.fill();
+
+            // 目盛りを描画 (整数値)
+            const minVal = Math.floor(Math.min(state.a, state.b) - 2);
+            const maxVal = Math.ceil(Math.max(state.a, state.b) + 2);
+
+            ctx.fillStyle = '#9CA3AF';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+
+            for (let i = minVal; i <= maxVal; i++) {
+                const x = toScreenX(i);
+                // 目盛り線
+                ctx.beginPath();
+                ctx.moveTo(x, axisY - 5);
+                ctx.lineTo(x, axisY + 5);
+                ctx.strokeStyle = '#9CA3AF';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // 数字
+                if (Math.abs(i) % 2 === 0 || (i >= state.a && i <= state.b)) { // 混みすぎないように調整
+                   ctx.fillText(i, x, axisY + 20);
+                }
+            }
+        }
+
+        function drawPoint(val, label, color, isMain = false) {
+            const x = toScreenX(val);
+            const y = height / 2 + 20;
+
+            // 点
+            ctx.beginPath();
+            ctx.arc(x, y, isMain ? 7 : 5, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // ラベル
+            ctx.fillStyle = color;
+            ctx.font = isMain ? 'bold 16px "Times New Roman", serif' : 'bold 14px "Times New Roman", serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, x, y - 15);
+        }
+
+        function drawArch(startVal, endVal, label, color, heightOffset) {
+            const x1 = toScreenX(startVal);
+            const x2 = toScreenX(endVal);
+            const y = height / 2 + 20;
+            const midX = (x1 + x2) / 2;
+            const controlY = y - heightOffset; 
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y);
+            ctx.quadraticCurveTo(midX, controlY, x2, y);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // ラベル背景
+            ctx.fillStyle = 'white';
+            const labelY = y - heightOffset/2 - 5;
+            ctx.fillRect(midX - 10, labelY - 10, 20, 16);
+
+            // ラベル
+            ctx.fillStyle = color;
+            ctx.font = 'bold italic 14px "Times New Roman", serif';
+            ctx.fillText(label, midX, labelY);
+        }
+
+        function update() {
+            // 値の取得
+            state.m = parseInt(inputs.m.value);
+            state.n = parseInt(inputs.n.value);
+            state.a = parseFloat(inputs.a.value) || 0;
+            state.b = parseFloat(inputs.b.value) || 0;
+
+            // 表示更新
+            displays.m.textContent = state.m;
+            displays.n.textContent = state.n;
+
+            // 計算
+            const total = state.m + state.n;
+            const p = (state.n * state.a + state.m * state.b) / total;
+
+            displays.result.textContent = `x = ${parseFloat(p.toFixed(2))}`;
+
+            // 描画
+            drawNumberLine();
+
+            // 点A, B
+            drawPoint(state.a, 'A', '#4B5563');
+            drawPoint(state.b, 'B', '#4B5563');
+
+            // アーチ（比率の可視化）
+            // A -> P (m)
+            drawArch(state.a, p, state.m, '#ef4444', 60);
+            // P -> B (n)
+            drawArch(p, state.b, state.n, '#3b82f6', 60);
+
+            // 点P（最後に描画して一番上に来るように）
+            drawPoint(p, 'P', '#0d9488', true);
+        }
+
+        // イベントリスナー
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', update);
+        });
+
+        // 初期化
+        resizeCanvas();
+
+        // --- クイズロジック ---
+        const questions = [
+            {
+                id: 1,
+                a: 2, b: 8,
+                m: 2, n: 1,
+                text: "点 <span class='math-font'>A(2)</span> と 点 <span class='math-font'>B(8)</span> を結ぶ線分ABを <span class='math-font'>2:1</span> に内分する点の座標は？",
+                ans: 6,
+                hint: "(1×2 + 2×8) ÷ (2+1)"
+            },
+            {
+                id: 2,
+                a: -4, b: 6,
+                m: 3, n: 2,
+                text: "点 <span class='math-font'>A(-4)</span> と 点 <span class='math-font'>B(6)</span> を結ぶ線分ABを <span class='math-font'>3:2</span> に内分する点の座標は？",
+                ans: 2,
+                hint: "(2×(-4) + 3×6) ÷ (3+2)"
+            },
+            {
+                id: 3,
+                a: 10, b: -2,
+                m: 1, n: 3,
+                text: "点 <span class='math-font'>A(10)</span> と 点 <span class='math-font'>B(-2)</span> を結ぶ線分ABを <span class='math-font'>1:3</span> に内分する点の座標は？",
+                ans: 7,
+                hint: "(3×10 + 1×(-2)) ÷ (1+3)"
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-container');
+
+        questions.forEach(q => {
+            const html = `
+                <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 hover:bg-white transition-colors">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <span class="inline-block bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded font-bold mb-2">問${q.id}</span>
+                            <p class="font-medium text-gray-800">${q.text}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-gray-500 math-font italic">x = </span>
+                            <input type="number" id="q${q.id}-ans" class="w-20 p-2 border rounded text-center font-bold" placeholder="?">
+                            <button onclick="checkAnswer(${q.id}, ${q.ans})" class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition shadow-sm font-bold text-sm">判定</button>
+                        </div>
+                    </div>
+                    <div id="feedback-${q.id}" class="hidden mt-3 text-sm p-3 rounded-lg"></div>
+                </div>
+            `;
+            quizContainer.insertAdjacentHTML('beforeend', html);
+        });
+
+        window.checkAnswer = function(id, trueAns) {
+            const input = parseFloat(document.getElementById(`q${id}-ans`).value);
+            const feedbackEl = document.getElementById(`feedback-${id}`);
+            const q = questions.find(q => q.id === id);
+
+            if (input === trueAns) {
+                feedbackEl.innerHTML = `<i class="fas fa-check-circle mr-2"></i>正解です！`;
+                feedbackEl.className = "mt-3 text-sm p-3 rounded-lg bg-green-100 text-green-800 font-bold fade-in";
+            } else {
+                feedbackEl.innerHTML = `<i class="fas fa-times-circle mr-2"></i>不正解...<br>ヒント： ${q.hint}`;
+                feedbackEl.className = "mt-3 text-sm p-3 rounded-lg bg-red-100 text-red-800 fade-in";
+            }
+        };
+    </script>
+</body>
+</html>
