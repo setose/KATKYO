@@ -13,21 +13,10 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- MathJax (数式をきれいに表示するためのライブラリ) -->
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']]
-            },
-            svg: {
-                fontCache: 'global'
-            },
-            startup: {
-                typeset: false // React側で制御するため初期ロードはオフ
-            }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    
+    <!-- KaTeX (数式表示ライブラリ) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" xintegrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" xintegrity="sha384-XjKyOOdBnHPvxs8D9m57fuP698Bns75dMem06vJao7HnvrA42yV1XXfT9e3+M6+f" crossorigin="anonymous"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
@@ -36,7 +25,6 @@
             background-color: #f1f5f9;
             scroll-behavior: smooth;
         }
-        /* スライダーのカスタマイズ */
         input[type=range] {
             -webkit-appearance: none; 
             background: transparent; 
@@ -58,10 +46,6 @@
             background: #cbd5e1;
             border-radius: 2px;
         }
-        /* MathJaxの読み込み中のチラつき防止 */
-        mjx-container {
-            outline: none !important;
-        }
     </style>
 </head>
 <body>
@@ -70,26 +54,39 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
 
-        // 数式表示用コンポーネント (MathJaxラッパー)
+        // KaTeXを使った数式表示コンポーネント
         const MathTex = ({ children, block = false }) => {
             const containerRef = useRef(null);
 
             useEffect(() => {
-                if (window.MathJax && window.MathJax.typesetPromise && containerRef.current) {
-                    // コンポーネントの中身をクリアしてから数式をセット
-                    containerRef.current.innerHTML = block 
-                        ? `\\[${children}\\]` 
-                        : `\\(${children}\\)`;
-                    // MathJaxでレンダリング
-                    window.MathJax.typesetPromise([containerRef.current])
-                        .catch((err) => console.log('MathJax Error:', err));
+                if (window.katex && containerRef.current) {
+                    try {
+                        window.katex.render(children, containerRef.current, {
+                            throwOnError: false,
+                            displayMode: block
+                        });
+                    } catch (e) {
+                        console.error("KaTeX error:", e);
+                        containerRef.current.innerText = children;
+                    }
+                } else {
+                    // KaTeXがロードされていない場合のフォールバック（または再試行ロジック）
+                    const timer = setInterval(() => {
+                        if (window.katex && containerRef.current) {
+                            window.katex.render(children, containerRef.current, {
+                                throwOnError: false,
+                                displayMode: block
+                            });
+                            clearInterval(timer);
+                        }
+                    }, 100);
+                    return () => clearInterval(timer);
                 }
             }, [children, block]);
 
-            return <span ref={containerRef} className={block ? "block my-2" : "inline-block align-middle"} />;
+            return <span ref={containerRef} className={block ? "block my-2" : "inline-block"} />;
         };
 
-        // アイコン
         const Icon = ({ name, size = 20, color = "currentColor", className="" }) => {
             useEffect(() => {
                 lucide.createIcons();
@@ -160,14 +157,14 @@
                     <p className="text-slate-700 leading-relaxed mb-4">
                         2点 <MathTex>A(x_1, y_1)</MathTex>, <MathTex>B(x_2, y_2)</MathTex> 間の距離 <MathTex>AB</MathTex> は、次の式で求められます。
                     </p>
-                    <div className="text-center py-2 bg-white rounded-xl shadow-sm border border-indigo-100 overflow-x-auto">
+                    <div className="text-center py-4 bg-white rounded-xl shadow-sm border border-indigo-100 overflow-x-auto">
                         <MathTex block>{`AB = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}`}</MathTex>
                     </div>
-                    <p className="text-sm text-slate-600 mt-4 bg-white/60 p-3 rounded-lg inline-block">
+                    <div className="mt-4 bg-white/60 p-3 rounded-lg inline-block text-sm text-slate-700">
                         <span className="font-bold text-indigo-600 mr-2">Point!</span>
                          原点 <MathTex>O(0, 0)</MathTex> と点 <MathTex>P(x, y)</MathTex> の距離は、
                         <span className="font-bold mx-2"><MathTex>{`OP = \\sqrt{x^2 + y^2}`}</MathTex></span> となります。
-                    </p>
+                    </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-8 mt-8">
@@ -323,7 +320,7 @@
                                 </div>
                             </div>
 
-                            {/* 計算結果表示 - MathJaxで動的レンダリング */}
+                            {/* 計算結果表示 */}
                             <div className="bg-indigo-900 text-white p-5 rounded-xl shadow-lg relative overflow-hidden min-h-[200px] flex flex-col justify-center">
                                 <div className="absolute top-0 right-0 p-2 opacity-10">
                                     <Icon name="calculator" size={64} />
@@ -496,7 +493,6 @@
                             {status === "correct" && (
                                 <div className="mt-4 p-4 bg-white border border-green-200 rounded-lg animate-fade-in text-slate-700 shadow-sm overflow-x-auto">
                                     <p className="font-bold text-xs text-green-600 mb-1 uppercase tracking-wide">解説</p>
-                                    {/* 練習問題の解説もMathJaxで綺麗に表示 */}
                                     <MathTex block>{question.solutionTex}</MathTex>
                                 </div>
                             )}
