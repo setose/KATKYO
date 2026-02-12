@@ -1,0 +1,385 @@
+import React, { useState, useEffect } from 'react';
+import { ArrowRight, CheckCircle2, Lightbulb, MousePointerClick, RefreshCcw, Sparkles } from 'lucide-react';
+
+// --- Utility Components ---
+const Sup = ({ children }) => <sup className="text-[0.6em] relative -top-2">{children}</sup>;
+
+const MathFormula = ({ children, className = "" }) => (
+  <span className={`font-serif text-xl md:text-2xl tracking-wider ${className}`}>
+    {children}
+  </span>
+);
+
+const Section = ({ title, icon: Icon, children }) => (
+  <section className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 mb-8">
+    <div className="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+      <div className="bg-slate-100 p-2 rounded-lg text-slate-700">
+        <Icon size={22} strokeWidth={2} />
+      </div>
+      <h2 className="text-xl font-bold text-slate-800">{title}</h2>
+    </div>
+    {children}
+  </section>
+);
+
+// --- Main App Component ---
+export default function App() {
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-blue-200">
+      <header className="bg-slate-800 text-white p-8 md:p-10 text-center shadow-md mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">平方完成の基礎</h1>
+        <p className="text-slate-300 text-base md:text-lg max-w-2xl mx-auto">
+          二次関数のグラフ描画に不可欠な式変形を習得する
+        </p>
+      </header>
+
+      <main className="max-w-4xl mx-auto px-4 pb-12">
+        <IntroSection />
+        <StepByStepSection />
+        <SimulatorSection />
+        <QuizSection />
+      </main>
+    </div>
+  );
+}
+
+// --- 1. Intro Section ---
+function IntroSection() {
+  return (
+    <Section title="なぜ「平方完成」が必要なのか" icon={Lightbulb}>
+      <div className="space-y-6 text-base leading-relaxed">
+        <p>
+          前回、グラフの<strong>「平行移動」</strong>について学習しました。<br />
+          例えば、<MathFormula className="text-blue-700">y = (x - 2)<Sup>2</Sup> + 1</MathFormula> という式が与えられた場合、
+          これは基本となる <MathFormula>y = x<Sup>2</Sup></MathFormula> のグラフをx軸方向に2、y軸方向に1平行移動したものであると判断できます。
+          （すなわち、頂点の座標が <span className="font-bold text-blue-700">(2, 1)</span> であることがわかります）
+        </p>
+        <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
+          <p className="mb-4">
+            しかし、一般的な二次関数の問題は、展開された形で提示されることが多くあります。
+          </p>
+          <div className="text-center mb-4">
+            <MathFormula className="text-slate-800 font-bold text-2xl">
+              y = x<Sup>2</Sup> - 4x + 5
+            </MathFormula>
+          </div>
+          <p className="text-center text-slate-600">
+            この形式（一般形）のままでは、グラフの頂点の座標を直感的に読み取ることは困難です。
+          </p>
+        </div>
+        <p className="font-bold text-slate-700 text-lg border-l-4 border-blue-500 pl-3">
+          そこで必要となる手法が「平方完成」です。
+        </p>
+        <p>
+          展開された式を、完全平方式を含む <MathFormula>a(x - p)<Sup>2</Sup> + q</MathFormula> の形式（標準形）に変形する操作を指します。<br />
+          この変形を行うことで、頂点の座標が明確になり、グラフを正確に描画することが可能になります。
+        </p>
+      </div>
+    </Section>
+  );
+}
+
+// --- 2. Step by Step Section ---
+function StepByStepSection() {
+  return (
+    <Section title="平方完成の手順（基本）" icon={MousePointerClick}>
+      <p className="mb-6 text-slate-700">
+        最初は分数の計算を避けるため、<MathFormula>x</MathFormula> の係数が<strong>偶数</strong>である基本的なパターンで手順を確認します。<br/>
+        例として、<MathFormula className="font-bold text-xl">x<Sup>2</Sup> <span className="text-blue-600">+ 6</span>x <span className="text-purple-600">+ 10</span></MathFormula> を変形します。
+      </p>
+
+      <div className="space-y-4">
+        {/* Step 1 */}
+        <div className="bg-white border border-slate-200 rounded-lg p-5 relative">
+          <div className="text-blue-600 font-bold mb-3 flex items-center gap-2">
+            <span className="bg-blue-100 px-2 py-0.5 rounded text-sm">Step 1</span>
+            x の係数の「半分」を求める
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-6 ml-2">
+            <div className="flex-1 text-slate-700">
+              <p>
+                x の係数は <span className="text-blue-600 font-bold">+6</span> です。<br/>
+                この値の<strong>半分</strong>の数を考えます。<br/>
+                +6 の半分は <span className="text-red-600 font-bold">+3</span> となります。
+              </p>
+            </div>
+            <div className="bg-slate-50 p-4 rounded border border-slate-200 text-center min-w-[200px]">
+              <MathFormula><span className="text-blue-600">+6</span> ÷ 2 = <span className="text-red-600">+3</span></MathFormula>
+            </div>
+          </div>
+        </div>
+
+        {/* Step 2 */}
+        <div className="bg-white border border-slate-200 rounded-lg p-5 relative">
+          <div className="text-red-600 font-bold mb-3 flex items-center gap-2">
+            <span className="bg-red-100 px-2 py-0.5 rounded text-sm">Step 2</span>
+            カッコの2乗を作り、余分な値を引く
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-6 ml-2">
+            <div className="flex-1 text-slate-700">
+              <p>
+                Step 1で求めた値 <span className="text-red-600 font-bold">(+3)</span> を用い、<MathFormula>(x <span className="text-red-600">+ 3</span>)<Sup>2</Sup></MathFormula> という形を作ります。<br/>
+                しかし、これを展開すると <MathFormula>x<Sup>2</Sup> + 6x</MathFormula> に加えて、<MathFormula><span className="text-red-600">3</span><Sup>2</Sup> = <span className="text-emerald-600">9</span></MathFormula> が余分に生じます。<br/>
+                したがって、等式を成立させるために<strong>その2乗の数（9）を引きます</strong>。
+              </p>
+            </div>
+            <div className="bg-slate-50 p-4 rounded border border-slate-200 text-center min-w-[200px]">
+              <MathFormula>x<Sup>2</Sup> + 6x =</MathFormula><br/>
+              <MathFormula>(x <span className="text-red-600">+ 3</span>)<Sup>2</Sup> - <span className="text-emerald-600">9</span></MathFormula>
+            </div>
+          </div>
+        </div>
+
+        {/* Step 3 */}
+        <div className="bg-white border border-slate-200 rounded-lg p-5 relative">
+          <div className="text-purple-600 font-bold mb-3 flex items-center gap-2">
+            <span className="bg-purple-100 px-2 py-0.5 rounded text-sm">Step 3</span>
+            定数項を整理する
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-6 ml-2">
+            <div className="flex-1 text-slate-700">
+              <p>
+                最後に、元の式にあった定数項 <span className="text-purple-600 font-bold">+10</span> を加え、定数部分を計算して完了です。
+              </p>
+            </div>
+            <div className="bg-slate-50 p-4 rounded border border-slate-200 text-center min-w-[200px]">
+              <MathFormula>(x <span className="text-red-600">+ 3</span>)<Sup>2</Sup> - <span className="text-emerald-600">9</span> <span className="text-purple-600">+ 10</span></MathFormula>
+              <div className="my-2"><ArrowRight className="inline text-slate-400" /></div>
+              <MathFormula className="font-bold text-2xl">(x <span className="text-red-600">+ 3</span>)<Sup>2</Sup> + 1</MathFormula>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+// --- 3. Simulator Section ---
+function SimulatorSection() {
+  const [b, setB] = useState(4);
+  const [c, setC] = useState(1);
+
+  // 計算ロジック
+  const halfB = b / 2;
+  const squareHalfB = halfB * halfB;
+  const finalC = c - squareHalfB;
+
+  // 符号付き文字列のフォーマット関数
+  const formatNum = (num, addPlus = true) => {
+    if (num > 0) return addPlus ? `+${num}` : `${num}`;
+    if (num < 0) return `${num}`; // マイナスはそのまま
+    return "+0";
+  };
+
+  const formatB = (num) => {
+    if (num === 0) return "";
+    if (num === 1) return "+x";
+    if (num === -1) return "-x";
+    return num > 0 ? `+ ${num}x` : `- ${Math.abs(num)}x`;
+  };
+
+  return (
+    <Section title="シミュレーターによる視覚的理解" icon={RefreshCcw}>
+      <p className="mb-6 text-slate-700">
+        パラメータを変更し、式がどのように変形されるかを確認してください。（※xの係数は偶数に固定しています）
+      </p>
+
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* Controls */}
+        <div className="space-y-6 bg-white p-6 rounded-lg border border-slate-200">
+          <div>
+            <label className="flex justify-between font-bold text-slate-700 mb-2">
+              <span>x の係数 (b)</span>
+              <span className="text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1 rounded">{formatNum(b)}</span>
+            </label>
+            <input 
+              type="range" min="-10" max="10" step="2" 
+              value={b} onChange={(e) => setB(parseInt(e.target.value))}
+              className="w-full accent-blue-600"
+            />
+          </div>
+          <div>
+            <label className="flex justify-between font-bold text-slate-700 mb-2">
+              <span>定数項 (c)</span>
+              <span className="text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1 rounded">{formatNum(c)}</span>
+            </label>
+            <input 
+              type="range" min="-10" max="10" step="1" 
+              value={c} onChange={(e) => setC(parseInt(e.target.value))}
+              className="w-full accent-purple-600"
+            />
+          </div>
+        </div>
+
+        {/* Formula Display */}
+        <div className="bg-slate-800 text-white rounded-lg p-6 flex flex-col justify-center items-center relative overflow-hidden shadow-inner">
+           
+           <div className="space-y-6 w-full max-w-xs z-10">
+              {/* 元の式 */}
+              <div className="text-center">
+                <span className="text-slate-400 text-xs font-bold tracking-widest uppercase mb-1 block">与式</span>
+                <MathFormula className="text-2xl">
+                  y = x<Sup>2</Sup> <span className="text-blue-400">{formatB(b).replace('x', '')}</span><span className="text-blue-400 font-bold">x</span> <span className="text-purple-400">{formatNum(c)}</span>
+                </MathFormula>
+              </div>
+
+              <div className="flex justify-center text-slate-500">
+                <ArrowRight size={20} className="rotate-90 md:rotate-0 md:hidden" />
+                <ArrowRight size={20} className="hidden md:block" />
+              </div>
+
+              {/* 途中式 */}
+              <div className="text-center bg-slate-700 p-4 rounded border border-slate-600">
+                <span className="text-slate-400 text-xs font-bold tracking-widest uppercase mb-1 block">計算過程</span>
+                <MathFormula className="text-lg">
+                  (x <span className="text-red-400">{formatNum(halfB)}</span>)<Sup>2</Sup> - <span className="text-emerald-400">{squareHalfB}</span> <span className="text-purple-400">{formatNum(c)}</span>
+                </MathFormula>
+                <div className="mt-2 text-xs text-slate-300">
+                  <span className="text-blue-400">{b}</span> の半分が <span className="text-red-400">{formatNum(halfB)}</span><br/>
+                  相殺する値（2乗）は <span className="text-emerald-400">{squareHalfB}</span>
+                </div>
+              </div>
+
+              <div className="flex justify-center text-slate-500">
+                <ArrowRight size={20} className="rotate-90 md:rotate-0 md:hidden" />
+                <ArrowRight size={20} className="hidden md:block" />
+              </div>
+
+              {/* 完成形 */}
+              <div className="text-center">
+                <span className="text-slate-400 text-xs font-bold tracking-widest uppercase mb-1 block">標準形</span>
+                <MathFormula className="text-3xl font-bold">
+                  y = (x <span className="text-red-400">{formatNum(halfB)}</span>)<Sup>2</Sup> <span className="text-sky-300">{formatNum(finalC)}</span>
+                </MathFormula>
+                <div className="mt-4 inline-block bg-slate-900 border border-slate-700 text-slate-200 px-4 py-2 rounded text-sm font-medium">
+                  頂点：({-halfB}, {finalC})
+                </div>
+              </div>
+           </div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+// --- 4. Quiz Section ---
+function QuizSection() {
+  const quizzes = [
+    {
+      id: 1,
+      expression: <MathFormula>x<Sup>2</Sup> + 8x</MathFormula>,
+      targetForm: <MathFormula>(x + <span className="inline-block w-12 border-b border-slate-400 mx-1">A</span>)<Sup>2</Sup> - <span className="inline-block w-12 border-b border-slate-400 mx-1">B</span></MathFormula>,
+      ansA: 4,
+      ansB: 16,
+      hint: "xの係数「+8」の半分がAに入り、Aの2乗がBに入ります。"
+    },
+    {
+      id: 2,
+      expression: <MathFormula>x<Sup>2</Sup> - 2x + 5</MathFormula>,
+      targetForm: <MathFormula>(x <span className="inline-block w-12 border-b border-slate-400 mx-1 text-center">- A</span>)<Sup>2</Sup> + <span className="inline-block w-12 border-b border-slate-400 mx-1">B</span></MathFormula>,
+      ansA: 1, // 式の中で -A としているので、Aには1が入る
+      ansB: 4, // (-1)^2 を引いて5を足す -> -1 + 5 = 4
+      hint: "「-2」の半分は「-1」です。引く値は (-1)² = 1 となります。残りの定数項 -1 + 5 を計算します。"
+    }
+  ];
+
+  return (
+    <Section title="確認問題" icon={CheckCircle2}>
+      <p className="mb-6 text-slate-700">
+        空欄に当てはまる適切な数値を入力してください。<br/>
+        <span className="text-sm text-slate-500">※半角数字で入力</span>
+      </p>
+      
+      <div className="space-y-6">
+        {quizzes.map((quiz, index) => (
+          <QuizItem key={quiz.id} quiz={quiz} index={index + 1} />
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function QuizItem({ quiz, index }) {
+  const [valA, setValA] = useState('');
+  const [valB, setValB] = useState('');
+  const [status, setStatus] = useState('idle'); // idle, correct, incorrect
+
+  const checkAnswer = () => {
+    if (valA === '' || valB === '') return;
+    const isCorrectA = parseInt(valA) === quiz.ansA;
+    const isCorrectB = parseInt(valB) === quiz.ansB;
+    
+    if (isCorrectA && isCorrectB) {
+      setStatus('correct');
+    } else {
+      setStatus('incorrect');
+    }
+  };
+
+  return (
+    <div className={`p-6 rounded-lg border transition-colors ${
+      status === 'correct' ? 'bg-blue-50 border-blue-200' :
+      status === 'incorrect' ? 'bg-red-50 border-red-200' :
+      'bg-white border-slate-200'
+    }`}>
+      <div className="flex items-center gap-3 mb-4">
+        <span className="bg-slate-700 text-white text-sm font-bold w-6 h-6 rounded flex items-center justify-center">
+          {index}
+        </span>
+        <div className="text-lg">{quiz.expression} の平方完成</div>
+      </div>
+
+      <div className="flex flex-col md:flex-row items-center gap-6 my-6 bg-slate-50 p-6 rounded border border-slate-100">
+        <div className="text-xl text-center flex items-center justify-center w-full md:w-auto">
+          {quiz.targetForm}
+        </div>
+        <div className="flex gap-4">
+          <div className="flex flex-col items-center">
+            <label className="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">A の値</label>
+            <input 
+              type="number" 
+              value={valA} 
+              onChange={(e) => { setValA(e.target.value); setStatus('idle'); }}
+              className="w-20 text-center text-lg p-2 border rounded focus:border-blue-500 focus:outline-none bg-white font-serif"
+            />
+          </div>
+          <div className="flex flex-col items-center">
+            <label className="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">B の値</label>
+            <input 
+              type="number" 
+              value={valB} 
+              onChange={(e) => { setValB(e.target.value); setStatus('idle'); }}
+              className="w-20 text-center text-lg p-2 border rounded focus:border-blue-500 focus:outline-none bg-white font-serif"
+            />
+          </div>
+        </div>
+        <button 
+          onClick={checkAnswer}
+          className="bg-slate-700 hover:bg-slate-800 text-white font-medium py-2 px-6 rounded transition-colors w-full md:w-auto mt-4 md:mt-0"
+        >
+          解答する
+        </button>
+      </div>
+
+      {status === 'idle' && (
+        <div className="text-sm text-slate-600 flex items-start gap-2 bg-slate-100 p-3 rounded">
+          <Lightbulb size={16} className="text-slate-400 mt-0.5 shrink-0" />
+          <p>{quiz.hint}</p>
+        </div>
+      )}
+
+      {status === 'correct' && (
+        <div className="text-blue-700 font-medium flex items-center gap-2 bg-blue-100 p-3 rounded">
+          <CheckCircle2 size={18} className="text-blue-500" />
+          正解です。手順が正しく理解できています。
+        </div>
+      )}
+
+      {status === 'incorrect' && (
+        <div className="text-red-600 font-medium flex items-center gap-2 bg-red-100 p-3 rounded">
+          誤りがあります。ヒントを確認し、再度計算を行ってください。
+        </div>
+      )}
+    </div>
+  );
+}
