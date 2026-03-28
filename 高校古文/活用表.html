@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【初心者向け】古文の動詞・活用形の基本と覚え方</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --bg-color: #f4f7f6;
+            --box-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--box-bg);
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 1.8rem;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 12px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin-top: 30px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .highlight {
+            background: linear-gradient(transparent 60%, #ffeaa7 60%);
+            font-weight: bold;
+            color: #d35400;
+            padding: 0 4px;
+        }
+
+        .step-box {
+            background-color: #e8f4f8;
+            border-left: 5px solid #5bc0de;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 30px 0;
+            font-size: 1.05rem;
+        }
+
+        .step-box strong {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .step-list {
+            margin: 0;
+            padding-left: 20px;
+            list-style-type: decimal;
+        }
+
+        .step-list li {
+            margin-bottom: 8px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            min-width: 500px; /* スマホでスクロールさせるため */
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            font-size: 1.05rem;
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: normal;
+            white-space: nowrap;
+        }
+
+        td {
+            background-color: #fafafa;
+        }
+
+        td strong {
+            color: var(--primary-color);
+        }
+
+        .rule-box {
+            background-color: #fdf2e9;
+            border: 2px dashed var(--accent-color);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .rule-box h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .rule-box ul {
+            font-size: 1.1rem;
+            line-height: 2;
+        }
+
+        .intro-box {
+            background-color: #fdfaf6;
+            border: 1px solid #e0d4c8;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .intro-box h3 {
+            margin-top: 0;
+            color: #d35400;
+        }
+
+        .intro-box ul {
+            background: #fff;
+            padding: 15px 15px 15px 35px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+            h2 {
+                font-size: 1.2rem;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>【初心者向け】古文の動詞・活用形の基本と覚え方</h1>
+    <p>古文を読む上で避けて通れないのが「動詞の活用」です。<br>この資料では、基礎の基礎から、少ないものから順番に覚える最短ルートまでを解説します。</p>
+
+    <h2>0. そもそも「動詞」と「活用」って何？</h2>
+    <div class="intro-box">
+        <h3>① 動詞とは？</h3>
+        <p>「歩く」「食べる」「ある」など、<strong>動作や存在を表す言葉</strong>のことです。<br>
+        古文の動詞は、言い切りの形（辞書に載っている元の形）が基本的に<strong>「ウ段」の音</strong>で終わります。<br>
+        <small>例：書<strong>く</strong>（k<strong>u</strong>）、思<strong>ふ</strong>（f<strong>u</strong>）　※「あり」など一部例外もあります</small></p>
+
+        <h3 style="margin-top: 30px;">② 活用（かつよう）とは？</h3>
+        <p>下にくっつく言葉（「ない」「ます」「とき」など）に合わせて、<strong>単語の語尾の形が変化すること</strong>です。<br>
+        普段私たちが使っている現代語でも、無意識のうちに「活用」させています。</p>
+        
+        <p><strong>【現代語の「書く」の例】</strong></p>
+        <ul>
+            <li>書<strong>か</strong> ＋ ない （ア段に変化）</li>
+            <li>書<strong>き</strong> ＋ ます （イ段に変化）</li>
+            <li>書<strong>く</strong> ＋ 。（言い切りの形）</li>
+            <li>書<strong>く</strong> ＋ とき （ウ段のまま）</li>
+            <li>書<strong>け</strong> ＋ ば （エ段に変化）</li>
+            <li>書<strong>け</strong> ＋ ！（命令の形）</li>
+        </ul>
+        <p>このように形が変わることを「活用」と言います。古文では、この変化のパターン（活用表）が現代語とは少し異なるため、まずはそのパターンを覚えることが古文読解の第一歩になります。</p>
+    </div>
+
+    <h2>1. 準備：6つの「活用形」の順番を覚えよう</h2>
+    <p>動詞の形が変化するパターンのことを<strong>「活用形（かつようけい）」</strong>と呼びます。まずは以下の6つの名前と順番を暗記しましょう。自分の指を折りながら順番に唱えるのがおすすめです。</p>
+    
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th>未然形<br><small>（みぜん）</small></th>
+                <th>連用形<br><small>（れんよう）</small></th>
+                <th>終止形<br><small>（しゅうし）</small></th>
+                <th>連体形<br><small>（れんたい）</small></th>
+                <th>已然形<br><small>（いぜん）</small></th>
+                <th>命令形<br><small>（めいれい）</small></th>
+            </tr>
+        </table>
+    </div>
+
+    <h2>2. 最短で覚えるための4ステップ</h2>
+    <p>古文の動詞は全部で<strong>9種類</strong>あります。これらを攻略する最大のコツは<span class="highlight">「数の少ない例外的なものから覚える」</span>ことです。</p>
+    
+    <div class="step-box">
+        <strong>【攻略のステップ】</strong>
+        <ol class="step-list">
+            <li>変格活用（カ・サ・ナ・ラ変）をすべて覚える</li>
+            <li>1語しかない「下一段活用」を覚える</li>
+            <li>8語しかない「上一段活用」を覚える</li>
+            <li>最も多い「四段・上二段・下二段」は見分け方を覚える</li>
+        </ol>
+    </div>
+
+    <h2>ステップ①：変格活用（カサナラ変）</h2>
+    <p>不規則な変化をする動詞です。リズムよく30回ほど音読して口に覚えさせましょう。</p>
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th>種類（代表語）</th>
+                <th>未然</th>
+                <th>連用</th>
+                <th>終止</th>
+                <th>連体</th>
+                <th>已然</th>
+                <th>命令</th>
+            </tr>
+            <tr>
+                <td><strong>カ変</strong>（来）</td>
+                <td>こ</td><td>き</td><td>く</td><td>くる</td><td>くれ</td><td>こ・こよ</td>
+            </tr>
+            <tr>
+                <td><strong>サ変</strong>（す・おはす）</td>
+                <td>せ</td><td>し</td><td>す</td><td>する</td><td>すれ</td><td>せよ</td>
+            </tr>
+            <tr>
+                <td><strong>ナ変</strong>（死ぬ・往ぬ）</td>
+                <td>な</td><td>に</td><td>ぬ</td><td>ぬる</td><td>ぬれ</td><td>ね</td>
+            </tr>
+            <tr>
+                <td><strong>ラ変</strong>（あり・をり等）</td>
+                <td>ら</td><td>り</td><td>り</td><td>る</td><td>れ</td><td>れ</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>ステップ②・③：下一段・上一段活用</h2>
+    <p>数が極端に少ないグループです。該当する単語ごと丸暗記してしまいます。</p>
+    
+    <h3>下一段活用（たった1語！）</h3>
+    <p>対象の動詞は <span class="highlight">蹴る（ける）</span> のみです。</p>
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th>未然</th>
+                <th>連用</th>
+                <th>終止</th>
+                <th>連体</th>
+                <th>已然</th>
+                <th>命令</th>
+            </tr>
+            <tr>
+                <td>け</td><td>け</td><td>ける</td><td>ける</td><td>けれ</td><td>けよ</td>
+            </tr>
+        </table>
+    </div>
+
+    <h3>上一段活用（8語だけ！）</h3>
+    <p>覚え方の呪文：<span class="highlight">「ひいきにみゐる」</span><br>
+    （干る、射る・鋳る、着る、似る・煮る、見る、居る・率る）</p>
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th>未然</th>
+                <th>連用</th>
+                <th>終止</th>
+                <th>連体</th>
+                <th>已然</th>
+                <th>命令</th>
+            </tr>
+            <tr>
+                <td>い</td><td>い</td><td>いる</td><td>いる</td><td>いれ</td><td>いよ</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>ステップ④：四段・上二段・下二段活用</h2>
+    <p>古文の動詞の大部分を占めるのがこの3つです。すべての単語を暗記するのは不可能なため、<strong>「見分け方（判別法）」</strong>を使って判断します。</p>
+
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th>種類</th>
+                <th>未然</th>
+                <th>連用</th>
+                <th>終止</th>
+                <th>連体</th>
+                <th>已然</th>
+                <th>命令</th>
+            </tr>
+            <tr>
+                <td><strong>四段</strong></td>
+                <td>ア段</td><td>イ段</td><td>ウ段</td><td>ウ段</td><td>エ段</td><td>エ段</td>
+            </tr>
+            <tr>
+                <td><strong>上二段</strong></td>
+                <td>イ段</td><td>イ段</td><td>ウ段</td><td>ウル</td><td>ウレ</td><td>イヨ</td>
+            </tr>
+            <tr>
+                <td><strong>下二段</strong></td>
+                <td>エ段</td><td>エ段</td><td>ウ段</td><td>ウル</td><td>ウレ</td><td>エヨ</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="rule-box">
+        <h3>💡 超重要：四段・上二・下二の見分け方</h3>
+        <p>動詞の下に<strong>「ず（〜ない）」</strong>をつけて、直前の音（未然形）の母音を確認します。</p>
+        <ul>
+            <li><strong>ア段</strong>の音になる → <span class="highlight">四段活用</span> （例：読<strong>ま</strong>-ず）</li>
+            <li><strong>イ段</strong>の音になる → <span class="highlight">上二段活用</span> （例：起<strong>き</strong>-ず）</li>
+            <li><strong>エ段</strong>の音になる → <span class="highlight">下二段活用</span> （例：受<strong>け</strong>-ず）</li>
+        </ul>
+    </div>
+
+    <h2 style="margin-top: 60px;">まとめ：古文の動詞 活用表一覧</h2>
+    <p>最後に、全9種類の活用をひとつの表にまとめました。まずは何も見ずにこの表が書けるようになることを目指しましょう！</p>
+    
+    <div class="table-responsive">
+        <table style="font-size: 0.95rem;">
+            <tr>
+                <th>活用の種類</th>
+                <th>未然</th>
+                <th>連用</th>
+                <th>終止</th>
+                <th>連体</th>
+                <th>已然</th>
+                <th>命令</th>
+            </tr>
+            <tr>
+                <td><strong>四段</strong></td>
+                <td>ア段</td><td>イ段</td><td>ウ段</td><td>ウ段</td><td>エ段</td><td>エ段</td>
+            </tr>
+            <tr>
+                <td><strong>上二段</strong></td>
+                <td>イ段</td><td>イ段</td><td>ウ段</td><td>ウル</td><td>ウレ</td><td>イヨ</td>
+            </tr>
+            <tr>
+                <td><strong>下二段</strong></td>
+                <td>エ段</td><td>エ段</td><td>ウ段</td><td>ウル</td><td>ウレ</td><td>エヨ</td>
+            </tr>
+            <tr style="background-color: #fdfaf6;">
+                <td><strong>上一段</strong>（ひいきにみゐる）</td>
+                <td>い</td><td>い</td><td>いる</td><td>いる</td><td>いれ</td><td>いよ</td>
+            </tr>
+            <tr style="background-color: #fdfaf6;">
+                <td><strong>下一段</strong>（蹴る）</td>
+                <td>け</td><td>け</td><td>ける</td><td>ける</td><td>けれ</td><td>けよ</td>
+            </tr>
+            <tr>
+                <td><strong>カ変</strong>（来）</td>
+                <td>こ</td><td>き</td><td>く</td><td>くる</td><td>くれ</td><td>こ・こよ</td>
+            </tr>
+            <tr>
+                <td><strong>サ変</strong>（す・おはす）</td>
+                <td>せ</td><td>し</td><td>す</td><td>する</td><td>すれ</td><td>せよ</td>
+            </tr>
+            <tr>
+                <td><strong>ナ変</strong>（死ぬ・往ぬ）</td>
+                <td>な</td><td>に</td><td>ぬ</td><td>ぬる</td><td>ぬれ</td><td>ね</td>
+            </tr>
+            <tr>
+                <td><strong>ラ変</strong>（あり・をり等）</td>
+                <td>ら</td><td>り</td><td>り</td><td>る</td><td>れ</td><td>れ</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
