@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基礎から見直す 連立方程式（代入法編）</title>
+    <!-- Tailwind CSS (スタイリング用) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (落ち着いたフォント) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        /* detailsタグのアニメーション用 */
+        details > summary { list-style: none; cursor: pointer; }
+        details > summary::-webkit-details-marker { display: none; }
+        .math-box { overflow-x: auto; overflow-y: hidden; padding: 1rem 0; }
+    </style>
+    <!-- MathJax (数式を綺麗に表示するライブラリ) -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="bg-[#F5F5F4] text-[#44403C] leading-relaxed antialiased">
+
+    <div class="max-w-3xl mx-auto px-5 py-12">
+        
+        <!-- ヘッダー -->
+        <header class="text-center mb-16">
+            <h1 class="text-3xl md:text-4xl font-light text-[#1C1917] tracking-wider mb-4 border-b border-[#D6D3D1] pb-6">
+                基礎から見直す<br class="md:hidden"><span class="font-medium">連立方程式</span>
+            </h1>
+            <p class="text-[#57534E] text-sm md:text-base">
+                「文字が多くて、どこから手をつければいいか分からない…」<br>
+                今回はパズル感覚で解ける<strong>「代入法（入れ替え作戦）」</strong>で攻略します。
+            </p>
+        </header>
+
+        <!-- 最重要ルール -->
+        <section class="bg-white rounded-xl shadow-sm p-6 md:p-8 mb-12 border-t-4 border-[#0F766E]">
+            <h2 class="text-xl font-bold text-[#0F766E] mb-3 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                これだけは覚えて！大原則
+            </h2>
+            <p class="text-lg md:text-xl font-medium text-center py-4 bg-[#F0FDFA] rounded-lg text-[#115E59]">
+                連立方程式の目標は<br class="md:hidden">「<span class="text-red-600 font-bold border-b-2 border-red-200">文字を1つ消す</span>」こと
+            </p>
+            <p class="mt-4 text-[#57534E]">
+                $x$ と $y$ 、文字が2つあるから解けないんです。だったら、<strong>片方の文字の「正体」を暴いて、もう一つの式に当てはめて（入れ替えて）、文字を1種類だけにしてしまえばいい。</strong> これを「代入」と呼びます。
+            </p>
+        </section>
+
+        <!-- 第1章：2元連立方程式 -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-medium text-[#1C1917] mb-6 flex items-center">
+                <span class="bg-[#4338CA] text-white text-sm font-bold w-8 h-8 rounded-full flex items-center justify-center mr-3">1</span>
+                2元連立方程式（文字が2つ）
+            </h2>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 md:p-8">
+                <p class="mb-4">次の問題を一緒に解いてみましょう。文字は $x$ と $y$ の2つです。</p>
+                
+                <div class="math-box bg-[#F8FAFC] rounded border border-[#E2E8F0] mb-6 text-center text-lg">
+                    \[
+                    \begin{cases}
+                    y = 2x - 1 \dots ① \\
+                    x + 2y = 8 \dots ②
+                    \end{cases}
+                    \]
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Step 1 -->
+                    <div>
+                        <h3 class="font-bold text-[#4338CA] mb-2">Step 1：「正体」がわかっている文字を探す</h3>
+                        <p>①の式をよく見てください。「$y = \dots$」の形になっていますね。<br>
+                        これは、<strong>「$y$ の正体は $2x - 1$ だよ」</strong>と教えてくれているんです。</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div>
+                        <h3 class="font-bold text-[#4338CA] mb-2">Step 2：もう一つの式と「入れ替える（代入）」</h3>
+                        <p>②の式の「$y$」の部分に、暴いた正体「$2x - 1$」をそのまま入れ替えます。<br>
+                        <span class="text-red-600 font-bold">【超重要】入れ替えるときは、必ずカッコ $( \ \ )$ をつけてください！</span></p>
+                        <div class="bg-[#F8FAFC] p-4 rounded my-3 border border-[#E2E8F0]">
+                            <p class="text-center mb-2">元の②の式： $x + 2\textcolor{blue}{y} = 8$</p>
+                            <p class="text-center">入れ替えた後： $x + 2\textcolor{blue}{(2x - 1)} = 8$</p>
+                        </div>
+                        <p>どうですか？式の中から $y$ が完全に消滅しました！</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div>
+                        <h3 class="font-bold text-[#4338CA] mb-2">Step 3：文字が1つになった式を解く</h3>
+                        <p>あとは中学生の最初で習った普通の方程式です。カッコを外して解きましょう。</p>
+                        <div class="math-box text-center my-2">
+                            \[ x + 4x - 2 = 8 \]
+                            \[ 5x - 2 = 8 \]
+                            \[ 5x = 10 \]
+                            \[ x = 2 \]
+                        </div>
+                        <p>これで片方の答えが出ました。</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div>
+                        <h3 class="font-bold text-[#4338CA] mb-2">Step 4：元の式に戻して、もう1つも出す</h3>
+                        <p>分かった $x = 2$ を、計算しやすそうな最初の①の式に入れます。</p>
+                        <div class="math-box text-center my-2">
+                            \[ y = 2 \times 2 - 1 \]
+                            \[ y = 4 - 1 \]
+                            \[ y = 3 \]
+                        </div>
+                        <p class="mt-3 font-bold text-lg">答え： $x = 2, \ y = 3$</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 練習問題 2元 -->
+            <div class="mt-8 bg-[#FAFAF9] border border-[#E7E5E4] rounded-xl p-6">
+                <h3 class="font-bold text-lg text-[#1C1917] mb-4">✍️ 練習問題（文字が2つ）</h3>
+                <p class="text-sm text-[#78716C] mb-4">最初から「$y = \dots$」の形になっていない問題です。まずは自分で、どちらかの式を「$x = \dots$」または「$y = \dots$」の形（正体を暴く形）に変形させるところから始めましょう。</p>
+                
+                <div class="math-box text-lg mb-6">
+                    \[
+                    \begin{cases}
+                    x - 3y = 4 \dots ① \\
+                    2x + y = 1 \dots ②
+                    \end{cases}
+                    \]
+                </div>
+
+                <details class="group bg-white border border-[#D6D3D1] rounded-lg">
+                    <summary class="p-4 font-medium text-[#4338CA] hover:bg-[#EEF2FF] transition-colors flex justify-between items-center">
+                        解答と解説を見る
+                        <svg class="w-5 h-5 text-[#4338CA] group-open:-rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <div class="p-4 md:p-6 border-t border-[#D6D3D1] text-[#44403C]">
+                        <p class="mb-3"><strong>解説：</strong></p>
+                        <p>まず「正体」を作ります。①の式は $x$ に数字がついていないので、変形しやすそうです。</p>
+                        <p class="bg-[#F8FAFC] p-3 rounded text-center my-3">①を変形： $x = 3y + 4 \dots ①'$</p>
+                        <p>これで「$x$ の正体は $3y + 4$」だと分かりました。これを②の式の $x$ の部分に入れ替えます。（必ずカッコをつけて！）</p>
+                        <div class="math-box text-center bg-[#F8FAFC] rounded my-3">
+                            \[ 2(3y + 4) + y = 1 \]
+                            \[ 6y + 8 + y = 1 \]
+                            \[ 7y = 1 - 8 \]
+                            \[ 7y = -7 \]
+                            \[ y = -1 \]
+                        </div>
+                        <p>$y = -1$ が出ました。これを、さっき自分で作った正体の式（①'）に入れます。</p>
+                        <p class="text-center my-2">
+                            $x = 3 \times (-1) + 4$<br>
+                            $x = -3 + 4$<br>
+                            $x = 1$
+                        </p>
+                        <p class="font-bold mt-4 text-lg">答え： $x = 1, \ y = -1$</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- 第2章：3元連立方程式 -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-medium text-[#1C1917] mb-6 flex items-center">
+                <span class="bg-[#B91C1C] text-white text-sm font-bold w-8 h-8 rounded-full flex items-center justify-center mr-3">2</span>
+                3元連立方程式（文字が3つ）
+            </h2>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 md:p-8">
+                <p class="mb-4">文字が $x, y, z$ と3つに増えました。でもやることは同じです。<br>
+                <strong>「1つの文字の正体を暴いて、残り全部の式にばらまく」</strong>。これで文字が1つ消滅します。</p>
+
+                <div class="math-box bg-[#FEF2F2] rounded border border-[#FECACA] mb-6 text-center text-lg">
+                    \[
+                    \begin{cases}
+                    x = y + 1 \dots ① \\
+                    x + 2y + z = 8 \dots ② \\
+                    3x - y - z = 1 \dots ③
+                    \end{cases}
+                    \]
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Step 1 -->
+                    <div>
+                        <h3 class="font-bold text-[#B91C1C] mb-2">Step 1：「正体」がわかっている文字を見つける</h3>
+                        <p>①の式から、<strong>「$x$ の正体は $y + 1$」</strong>だと分かっています。</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div>
+                        <h3 class="font-bold text-[#B91C1C] mb-2">Step 2：残りすべての式からターゲット($x$)を消し去る</h3>
+                        <p>②と③の式にある $x$ を、すべて正体の $(y + 1)$ に入れ替えて、$x$ をこの世から追い出します。</p>
+                        
+                        <div class="mt-4 p-4 bg-[#F9FAFB] rounded border border-[#E5E7EB]">
+                            <p class="font-bold mb-2">②の式に入れ替える：</p>
+                            <p class="text-center mb-1">$(y + 1) + 2y + z = 8$</p>
+                            <p class="text-center text-sm text-[#78716C]">（整理すると）</p>
+                            <p class="text-center font-bold text-lg">$3y + z = 7 \dots ④$</p>
+                        </div>
+
+                        <div class="mt-4 p-4 bg-[#F9FAFB] rounded border border-[#E5E7EB]">
+                            <p class="font-bold mb-2">③の式に入れ替える：</p>
+                            <p class="text-center mb-1">$3(y + 1) - y - z = 1$</p>
+                            <p class="text-center mb-1">$3y + 3 - y - z = 1$</p>
+                            <p class="text-center text-sm text-[#78716C]">（整理すると）</p>
+                            <p class="text-center font-bold text-lg">$2y - z = -2 \dots ⑤$</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div>
+                        <h3 class="font-bold text-[#B91C1C] mb-2">Step 3：見慣れた「2文字の連立方程式」の完成！</h3>
+                        <p>新しくできた④と⑤の式を見てください。</p>
+                        <div class="math-box text-center my-3">
+                            \[
+                            \begin{cases}
+                            3y + z = 7 \dots ④ \\
+                            2y - z = -2 \dots ⑤
+                            \end{cases}
+                            \]
+                        </div>
+                        <p>これ、<strong>第1章でやったものと全く同じ（文字が2つの問題）</strong>ですよね！<br>
+                        ここまで来れば勝ったも同然です。これも代入法で解いてみましょう。<br>
+                        ④を「$z = \dots$」の形にします。<br>
+                        $z = -3y + 7$<br>
+                        これを⑤の $z$ に入れ替えます（カッコを忘れずに！）。<br>
+                        $2y - (-3y + 7) = -2$<br>
+                        $2y + 3y - 7 = -2$<br>
+                        $5y = 5$<br>
+                        $y = 1$<br>
+                        </p>
+                        <p>出た $y = 1$ を使って残りを求めます。<br>
+                        $z = -3 \times 1 + 7 = 4$<br>
+                        最後に、一番最初の①の式に $y=1$ を入れて、<br>
+                        $x = 1 + 1 = 2$</p>
+                        <p class="mt-3 font-bold text-lg">答え： $x = 2, \ y = 1, \ z = 4$</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 練習問題 3元 -->
+            <div class="mt-8 bg-[#FAFAF9] border border-[#E7E5E4] rounded-xl p-6">
+                <h3 class="font-bold text-lg text-[#1C1917] mb-4">✍️ 練習問題（文字が3つ）</h3>
+                <p class="text-sm text-[#78716C] mb-4">自分で「正体」を作るところからスタートです。数字がついていない文字（今回は①の $x$ や $y$）を選ぶと変形が簡単です。少し計算が長いので、余白に大きく丁寧に書くのがミスを減らすコツです。</p>
+                
+                <div class="math-box text-lg mb-6">
+                    \[
+                    \begin{cases}
+                    x - y = 2 \dots ① \\
+                    2x + y - z = -1 \dots ② \\
+                    x - 3y + 2z = 8 \dots ③
+                    \end{cases}
+                    \]
+                </div>
+
+                <details class="group bg-white border border-[#D6D3D1] rounded-lg">
+                    <summary class="p-4 font-medium text-[#B91C1C] hover:bg-[#FEF2F2] transition-colors flex justify-between items-center">
+                        解答と解説を見る
+                        <svg class="w-5 h-5 text-[#B91C1C] group-open:-rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <div class="p-4 md:p-6 border-t border-[#D6D3D1] text-[#44403C]">
+                        <p class="mb-3"><strong>解説：</strong></p>
+                        <p>まず、①の式を変形して「正体」を作ります。</p>
+                        <p class="bg-[#F8FAFC] p-3 rounded text-center my-3">①を変形： $x = y + 2 \dots ①'$</p>
+                        
+                        <p class="mt-4 font-bold">1. ②と③の式から $x$ を消す</p>
+                        <p>②と③の $x$ の部分に、$(y + 2)$ を入れ替えます。</p>
+                        
+                        <p class="mt-2 text-sm text-[#78716C]">【②に入れ替える】</p>
+                        <div class="math-box text-center bg-[#F8FAFC] rounded my-2">
+                            \[ 2(y + 2) + y - z = -1 \]
+                            \[ 2y + 4 + y - z = -1 \]
+                            \[ 3y - z = -5 \dots ④ \]
+                        </div>
+
+                        <p class="mt-4 text-sm text-[#78716C]">【③に入れ替える】</p>
+                        <div class="math-box text-center bg-[#F8FAFC] rounded my-2">
+                            \[ (y + 2) - 3y + 2z = 8 \]
+                            \[ -2y + 2z = 6 \]
+                            \[ -y + z = 3 \dots ⑤ \]
+                        </div>
+
+                        <p class="mt-6 font-bold">2. ④と⑤で2元の連立方程式を解く</p>
+                        <p>④と⑤を使って、$y$ と $z$ を求めます。</p>
+                        <div class="math-box text-center my-2">
+                            \[
+                            \begin{cases}
+                            3y - z = -5 \dots ④ \\
+                            -y + z = 3 \dots ⑤
+                            \end{cases}
+                            \]
+                        </div>
+                        <p>これも代入で解きましょう。⑤を変形して $z = y + 3$ にします。<br>
+                        これを④の $z$ に入れ替えます。</p>
+                        <p class="text-center my-2">
+                            $3y - (y + 3) = -5$<br>
+                            $3y - y - 3 = -5$<br>
+                            $2y = -2$<br>
+                            $y = -1$
+                        </p>
+                        <p>あとは順番に戻していくだけです。<br>
+                        $z = -1 + 3 = 2$<br>
+                        $x = -1 + 2 = 1$
+                        </p>
+                            
+                        <p class="font-bold mt-4 text-lg">答え： $x = 1, \ y = -1, \ z = 2$</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- まとめ -->
+        <footer class="text-center border-t border-[#D6D3D1] pt-8 mt-12 text-[#57534E]">
+            <p class="mb-2">お疲れ様でした。</p>
+            <p>代入法は<strong>「正体を暴いて、入れ替えていくパズル」</strong>です。<br>
+            入れ替えるときの「カッコをつける」ことだけ忘れなければ、確実に文字を減らしていけます。応援しています！</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
