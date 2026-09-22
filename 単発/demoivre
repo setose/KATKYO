@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>複素数平面 問3 解説</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --panel: #ffffff;
+    --ink: #2b2b2b;
+    --sub: #6b6b6b;
+    --accent: #2f6f6b;
+    --accent-soft: #e6f2f1;
+    --step-num: #2f6f6b;
+    --border: #e4ded4;
+    --warn-bg: #fff6e8;
+    --warn-border: #e8c987;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c1b19;
+      --panel: #242220;
+      --ink: #ece7de;
+      --sub: #ada79c;
+      --accent: #7fc9c2;
+      --accent-soft: #26302e;
+      --step-num: #7fc9c2;
+      --border: #3a3733;
+      --warn-bg: #2e2a1c;
+      --warn-border: #6b5a2c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1c1b19;
+    --panel: #242220;
+    --ink: #ece7de;
+    --sub: #ada79c;
+    --accent: #7fc9c2;
+    --accent-soft: #26302e;
+    --step-num: #7fc9c2;
+    --border: #3a3733;
+    --warn-bg: #2e2a1c;
+    --warn-border: #6b5a2c;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+    line-height: 1.85;
+    padding: 32px 16px 80px;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  header.page-head {
+    margin-bottom: 32px;
+  }
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-size: 24px;
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+  .problem-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--accent);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .problem-box .label {
+    font-size: 13px;
+    color: var(--sub);
+    margin-bottom: 8px;
+  }
+  .problem-box .eq {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 10px;
+    overflow-x: auto;
+  }
+
+  section.step {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 24px 22px;
+    margin-top: 24px;
+    position: relative;
+  }
+  .step-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+    font-size: 17px;
+  }
+  .step-num {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--step-num);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .eq-block {
+    overflow-x: auto;
+    padding: 4px 0;
+    margin: 14px 0;
+  }
+  .eq-block.center { text-align: center; }
+
+  .note {
+    background: var(--accent-soft);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 15px;
+  }
+  .note .note-label {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+    display: block;
+  }
+  .warn {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 15px;
+  }
+  .warn .warn-label {
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  table.calc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 15px;
+    overflow-x: auto;
+    display: block;
+  }
+  table.calc-table th, table.calc-table td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  table.calc-table th {
+    background: var(--accent-soft);
+  }
+
+  .answer-box {
+    background: var(--panel);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .answer-box .label {
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .answer-box .eq { font-size: 19px; }
+
+  section.summary {
+    margin-top: 28px;
+    padding: 22px 24px;
+    border-radius: 12px;
+    border: 1px dashed var(--border);
+    background: var(--panel);
+  }
+  section.summary h2 {
+    font-size: 16px;
+    margin: 0 0 12px;
+  }
+  section.summary ol {
+    padding-left: 22px;
+    margin: 0;
+  }
+  section.summary li { margin-bottom: 8px; }
+
+  .small-sub {
+    font-size: 13.5px;
+    color: var(--sub);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-head">
+    <div class="eyebrow">複素数平面 ・ ド・モアブルの定理の利用</div>
+    <h1>問3の解説 ― 角度を比較して θ を求める</h1>
+    <div class="problem-box">
+      <div class="label">問題</div>
+      <p style="margin:0;">i を虚数単位とする。次の等式を満たす θ を 0 ≦ θ &lt; 2π の範囲ですべて求めよ。</p>
+      <div class="eq">
+        \[
+        \frac{\cos 9\theta+i\sin 9\theta}{\cos 6\theta+i\sin 6\theta}=\frac{1}{2}+\frac{\sqrt3}{2}i
+        \]
+      </div>
+    </div>
+  </header>
+
+  <!-- STEP 0: 方針 -->
+  <section class="step">
+    <h2 class="step-title"><span class="step-num">方針</span>どういう流れで解くか</h2>
+    <p>
+      この問題は一見複雑に見えますが、やることは大きく4つのステップに分かれます。
+    </p>
+    <ol style="padding-left:22px;">
+      <li>左辺の分数を、角度の引き算の形に簡単にする</li>
+      <li>右辺を「cos＋i sin」の形に書き直す</li>
+      <li>「角度が等しい」という条件から方程式を立てる</li>
+      <li>0 ≦ θ &lt; 2π の範囲に収まる θ だけを選び出す</li>
+    </ol>
+    <p>この流れは、複素数平面で「回転」を扱う問題によく出てくる型なので、順番ごと覚えてしまうのがおすすめです。</p>
+  </section>
+
+  <!-- STEP 1 -->
+  <section class="step">
+    <h2 class="step-title"><span class="step-num">1</span>左辺を簡単にする（角度の引き算）</h2>
+    <p>
+      cosθ + i sinθ という形の複素数どうしの<strong>割り算</strong>には、次の便利な性質があります。
+    </p>
+    <div class="note">
+      <span class="note-label">使う性質</span>
+      \[
+      \frac{\cos\alpha+i\sin\alpha}{\cos\beta+i\sin\beta}=\cos(\alpha-\beta)+i\sin(\alpha-\beta)
+      \]
+      つまり、「割り算」をすると<strong>角度が引き算になる</strong>、という性質です。
+    </div>
+    <p>
+      なぜこうなるのか、簡単に触れておきます。cosθ + i sinθ は複素数平面上で「原点から距離1、角度θの点」を表しています。複素数どうしの割り算は、<strong>角度を引き算し、距離（絶対値）を割り算する</strong>という性質があります。今回は距離がどちらも1なので、角度の引き算だけが残る、というわけです。
+    </p>
+    <p>今回、α = 9θ、β = 6θ なので、この性質を使うと</p>
+    <div class="eq-block center">
+      \[
+      \frac{\cos 9\theta+i\sin 9\theta}{\cos 6\theta+i\sin 6\theta}=\cos(9\theta-6\theta)+i\sin(9\theta-6\theta)=\cos 3\theta+i\sin 3\theta
+      \]
+    </div>
+    <p>これで、方程式は次のようにシンプルになります。</p>
+    <div class="eq-block center">
+      \[
+      \cos 3\theta+i\sin 3\theta=\frac12+\frac{\sqrt3}{2}i \quad \cdots ①
+      \]
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step">
+    <h2 class="step-title"><span class="step-num">2</span>右辺を「cos + i sin」の形に直す</h2>
+    <p>
+      次に、右辺 <strong>1/2 + (√3/2)i</strong> がどんな角度に対応するのかを調べます。①の左辺と同じ「cos○ + i sin○」の形に揃えないと、角度どうしを比較できないからです。
+    </p>
+    <p>
+      単位円（半径1の円）の上で、cos = 1/2、sin = √3/2 となる角度を思い出すと、これは<strong>π/3（60°）</strong>にあたります。
+    </p>
+    <div class="eq-block center">
+      \[
+      \cos\frac{\pi}{3}=\frac12,\qquad \sin\frac{\pi}{3}=\frac{\sqrt3}{2}
+      \]
+    </div>
+    <div class="note">
+      <span class="note-label">確認のしかた</span>
+      三角比の表や単位円をイメージして、cos = 1/2 となる代表的な角度（30°, 60°など）から候補を絞り、sin の値も一致するものを選ぶとよいです。ここでは 60° = π/3 が両方の条件を満たします。
+    </div>
+    <p>よって①は、次のように書き直せます。</p>
+    <div class="eq-block center">
+      \[
+      \cos 3\theta+i\sin 3\theta=\cos\frac{\pi}{3}+i\sin\frac{\pi}{3} \quad \cdots ②
+      \]
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step">
+    <h2 class="step-title"><span class="step-num">3</span>角度を比較して方程式を立てる</h2>
+    <p>
+      ②の両辺は、どちらも「cos○ + i sin○」の形です。この形が等しくなるのは、○の部分（角度）が完全に一致しているときだけ、<strong>とは限りません</strong>。ここが今回の一番の注意点です。
+    </p>
+    <div class="warn">
+      <span class="warn-label">注意：角度には「一周分のズレ」が許される</span>
+      角度は 2π（360°）進むと、もとの位置にちょうど戻ってきます。つまり、角度が 2π だけズレていても、cos や sin の値としては<strong>まったく同じ</strong>になります。<br>
+      例えば、角度 0 と角度 2π は、単位円上ではまったく同じ点を指しています。
+    </div>
+    <p>
+      そのため、cos X + i sin X = cos Y + i sin Y が成り立つ条件は、次のようになります。
+    </p>
+    <div class="note">
+      <span class="note-label">角度が一致する条件</span>
+      \[
+      X = Y + 2k\pi \quad (k \text{ は整数})
+      \]
+      「X と Y はぴったり同じ」ではなく、「2π の整数倍だけズレていてもよい」という意味です。
+    </div>
+    <p>これを②に当てはめると、次の方程式が立ちます。</p>
+    <div class="eq-block center">
+      \[
+      3\theta=\frac{\pi}{3}+2k\pi \quad (k \text{ は整数})
+      \]
+    </div>
+    <p>両辺を3で割ると、θ について解くことができます。</p>
+    <div class="eq-block center">
+      \[
+      \theta=\frac{\pi}{9}+\frac{2k\pi}{3} \quad \cdots ③
+      \]
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step">
+    <h2 class="step-title"><span class="step-num">4</span>0 ≦ θ &lt; 2π の範囲に絞り込む</h2>
+    <p>
+      ③の式は、k にどんな整数を入れても成り立つ「一般解」です。しかし問題では「0 ≦ θ &lt; 2π の範囲ですべて求めよ」と指定されているので、この範囲に収まる k だけを探します。
+    </p>
+    <p>k = 0, 1, 2, 3, … と順番に代入して、θ の値を計算していきます。</p>
+    <table class="calc-table">
+      <tr><th>k</th><th>θ = π/9 + 2kπ/3</th><th>計算</th><th>0 ≦ θ &lt; 2π ?</th></tr>
+      <tr><td>0</td><td>π/9 + 0</td><td>π/9</td><td>○ 範囲内</td></tr>
+      <tr><td>1</td><td>π/9 + 6π/9</td><td>7π/9</td><td>○ 範囲内</td></tr>
+      <tr><td>2</td><td>π/9 + 12π/9</td><td>13π/9</td><td>○ 範囲内</td></tr>
+      <tr><td>3</td><td>π/9 + 18π/9</td><td>19π/9</td><td>× 2π = 18π/9 を超える</td></tr>
+    </table>
+    <p class="small-sub">
+      ※ 2π/3 = 6π/9 と分母を9にそろえて計算すると、大小比較がしやすくなります。<br>
+      ※ k = -1 を入れると θ が負の数になってしまうので、これも範囲外です。
+    </p>
+    <div class="warn">
+      <span class="warn-label">ここでのミスに注意</span>
+      k を増やしすぎたり、逆に途中でやめてしまったりすると、答えを一つ見落としたり、余計なものを含めてしまったりします。<strong>範囲を明らかに超えるところまで、または明らかに範囲外になるまで計算を続ける</strong>のが確実です。
+    </div>
+  </section>
+
+  <div class="answer-box">
+    <div class="label">解答</div>
+    <div class="eq">
+      \[
+      \theta=\frac{\pi}{9},\ \ \frac{7\pi}{9},\ \ \frac{13\pi}{9}
+      \]
+    </div>
+  </div>
+
+  <section class="summary">
+    <h2>この問題の「型」まとめ</h2>
+    <ol>
+      <li><strong>割り算の形</strong>を見たら、角度の引き算にできないか考える（cosα+isinα ÷ cosβ+isinβ = cos(α−β)+isin(α−β)）</li>
+      <li>数値で与えられた右辺（または左辺）は、<strong>単位円のcos・sinの値</strong>から角度を逆算して、cos○+i sin○の形に揃える</li>
+      <li>「cos X + i sin X = cos Y + i sin Y」が成り立つのは、<strong>X = Y + 2kπ（kは整数）</strong>のときだけ、ということを忘れない（角度は2πごとに同じ位置に戻るため）</li>
+      <li>一般解を出したら、<strong>指定された範囲</strong>に収まる k を一つずつ確認して答えを絞り込む</li>
+    </ol>
+  </section>
+
+</div>
+</body>
+</html>
